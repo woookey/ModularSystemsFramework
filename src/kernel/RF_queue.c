@@ -1,6 +1,7 @@
 #include <RF_queue.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 static RFEvent* popFromQueue(struct RF_BaseQueue* self);
 static void pushToQueue(struct RF_BaseQueue* self, RFEvent* evt, size_t sizeOfEvent);
