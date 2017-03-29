@@ -1,0 +1,30 @@
+RF_OBJS = RF_agents.o RF_scheduler.o RF_events.o RF_queue.o
+OBJS = main.o LEDManager.o
+CFLAGS = -Wall -g -I. -c
+LFLAGS = -Wall -I.
+CC = gcc
+
+all: ${OBJS} ${RF_OBJS}
+	${CC} ${LFLAGS} ${OBJS} ${RF_OBJS} -o main
+
+main.o: main.c RF_scheduler.o RF_agents.o RF_events.o RF_queue.o
+	${CC} ${CFLAGS} main.c
+	
+LEDManager.o: LEDManager.c LEDManager.h RF_events.o RF_agents.o RF_queue.o
+	${CC} ${CFLAGS} LEDManager.c
+
+RF_scheduler.o: RF_agents.o RF_scheduler.h RF_scheduler.c RF_events.o RF_queue.o
+	${CC} ${CFLAGS} RF_scheduler.c
+
+RF_agents.o: RF_agents.c RF_agents.h RF_events.o RF_queue.o
+	${CC} ${CFLAGS} RF_agents.c
+	
+RF_queue.o: RF_events.o RF_queue.c RF_queue.h
+	${CC} ${CFLAGS} RF_queue.c
+	
+RF_events.o: RF_events.c RF_events.h
+	${CC} ${CFLAGS} RF_events.c
+
+clean:
+	rm -rf *.o *~ main
+	
