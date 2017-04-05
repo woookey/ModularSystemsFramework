@@ -1,12 +1,16 @@
 RF_DIR = ${HOME}/Documents/ARMDev/src/kernel
+UNITY_DIR = ${HOME}/Documents/ARMDev/src/testing/Unity
 RF_OBJS = RF_events.o RF_queue.o
-OBJS = test.o
+OBJS = test.o unity.o
 CC = gcc
-CFLAGS = -Wall -g -I${RF_DIR} -c 
+CFLAGS = -Wall -g -I${RF_DIR} -I${UNITY_DIR} -c 
 LFLAGS = -Wall -g -I.
 
-all: ${OBJS} ${RF_OBJS} 
-	${CC} ${LFLAGS} ${OBJS} ${RF_OBJS} -o test
+RF_queueUnitTest: ${OBJS} ${RF_OBJS}
+	${CC} ${LFLAGS} ${OBJS} ${RF_OBJS} -o RF_queue_UnitTest
+	
+unity.o: ${UNITY_DIR}/unity.c ${UNITY_DIR}/unity.h
+	${CC} ${CFLAGS} ${UNITY_DIR}/unity.c 
 
 test.o: test.c RF_queue.o RF_events.o
 	${CC} ${CFLAGS} test.c
@@ -18,4 +22,4 @@ RF_events.o: ${RF_DIR}/RF_events.c ${RF_DIR}/RF_events.h
 	${CC} ${CFLAGS} ${RF_DIR}/RF_events.c
 
 clean:
-	rm -rf *.o *~ test
+	rm -rf *.o *~ RF_queue_UnitTest
