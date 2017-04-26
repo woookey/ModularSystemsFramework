@@ -13,10 +13,9 @@ struct RF_BaseQueue
 	RFEvent * TAIL;
 	size_t totalSize;
 	size_t spaceLeft;
-	void (*push)(struct RF_BaseQueue* self, RFEvent* evt, size_t sizeOfEvent);
-	bool isEmpty;
-	bool isFull;
-	RFEvent* (*pop)(struct RF_BaseQueue* self);
+	uint32_t noOfEvents;
+	bool (*push)(struct RF_BaseQueue* self, RFEvent* evt, size_t sizeOfEvent);
+	RFEvent * const (*pop)(struct RF_BaseQueue* self);
 	void (*removeGarbage)(struct RF_BaseQueue* self);
 };
 

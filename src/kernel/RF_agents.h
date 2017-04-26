@@ -8,6 +8,10 @@
 
 #include <RF_events.h>
 
+/**
+ * TODO
+ * Each agent needs to have RFQueue not RFEvent** eventsPtr
+ */
 struct RFBaseAgent
 {
 	RFEvent ** eventsPtr;
