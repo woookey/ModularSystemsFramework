@@ -53,31 +53,21 @@ bool pushToQueue(struct RF_BaseQueue* self, RFEvent* evt, size_t sizeOfEvent)
 	{
 		memcpy(self->HEAD, evt, evt->eventSize);
 		self->TAIL = self->HEAD;
-		printf("TAIL(firstEvt @ %d) info: size = %d, pConsum = %d, sVal = %d\n", (uint64_t)self->TAIL,
-				self->TAIL->eventSize, self->TAIL->pendingConsumers, self->TAIL->signalValue);
 	}
 	else
 	{
 		self->TAIL = (RFEvent*)((uint64_t)self->TAIL+(uint64_t)self->TAIL->eventSize);
 		memcpy(self->TAIL, evt, evt->eventSize);
-		printf("TAIL(nonFirstEvt @ %d) info: size = %d, pConsum = %d, sVal = %d\n", (uint64_t)self->TAIL,
-						self->TAIL->eventSize, self->TAIL->pendingConsumers, self->TAIL->signalValue);
 	}
 	self->spaceLeft = self->spaceLeft - evt->eventSize;
 	self->noOfEvents++;
 	return true;
 }
 
-/**
- * TODO
- * Fix garbage collector
- */
 void removeGarbageFromQueue(struct RF_BaseQueue* self)
 {
 	assert(self != NULL);
 	assert(self->noOfEvents >= 1);
-	printf("HEAD before GC: size - %d, pCons - %d, sigVal - %d\n",
-			self->HEAD->eventSize, self->HEAD->pendingConsumers, self->HEAD->signalValue);
 	if (self->HEAD->pendingConsumers == 0)
 	{
 		if (self->noOfEvents > 1)
@@ -100,7 +90,5 @@ void removeGarbageFromQueue(struct RF_BaseQueue* self)
 		}
 		self->noOfEvents--;
 	}
-	printf("HEAD after GC: size - %d, pCons - %d, sigVal - %d\n",
-				self->HEAD->eventSize, self->HEAD->pendingConsumers, self->HEAD->signalValue);
 }
 
