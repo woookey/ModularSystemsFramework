@@ -80,6 +80,41 @@ void run_AddOneBasicEventAndTwoDifferentExtendedEventsAndPopAllOfThemAndClearGar
 {
 	clearVariables();
 	createEmptyQueue(&testedQueue, eventsPool, sizeof(eventsPool));
+	ExtEventVerA extEvtA = { .baseEvt = { .eventSize = sizeof(ExtEventVerA),
+				.pendingConsumers = 1, .signalValue = 20, }, .Uint32info = 50,
+				.booleanInfo = true, .floatInfo = 12.5f, };
+	ExtEventVerB extEvtB = { .baseEvt = { .eventSize = sizeof(ExtEventVerB),
+				.pendingConsumers = 1, .signalValue = 30, }, .content = { .val1 =
+				5, .val2 = 10, .val3 = true, } };
+	RFEvent basicEvent = { .eventSize = sizeof(RFEvent), .pendingConsumers = 2,
+				.signalValue = 150, };
+	testedQueue.push(&testedQueue, &extEvtA, extEvtA.baseEvt.eventSize);
+	testedQueue.push(&testedQueue, &basicEvent, basicEvent.eventSize);
+	testedQueue.push(&testedQueue, &extEvtB, extEvtB.baseEvt.eventSize);
+	RFEvent* evt = testedQueue.pop(&testedQueue);
+	TEST_ASSERT(evt->eventSize == sizeof(ExtEventVerA));
+	TEST_ASSERT(evt->pendingConsumers == 1);
+	TEST_ASSERT(evt->signalValue == 20);
+	ExtEventVerA* evtA = (ExtEventVerA*)evt;
+	TEST_ASSERT(evtA->Uint32info == 50);
+	TEST_ASSERT(evtA->booleanInfo);
+	TEST_ASSERT(evtA->floatInfo == 12.5f);
+	evtA->baseEvt.pendingConsumers--;
+	testedQueue.removeGarbage(&testedQueue);
+	evt = testedQueue.pop(&testedQueue);
+	TEST_ASSERT(evt->eventSize == sizeof(RFEvent));
+	TEST_ASSERT(evt->pendingConsumers == 2);
+	TEST_ASSERT(evt->signalValue == 150);
+	evt->pendingConsumers -= 2;
+	ExtEventVerB evtB = (ExtEventVerB*)testedQueue.pop(&testedQueue);
+	TEST_ASSERT(evtB->baseEvt.eventSize == sizeof(ExtEventVerB));
+	TEST_ASSERT(evtB->baseEvt.pendingConsumers == 1);
+	TEST_ASSERT(evtB->baseEvt.signalValue == 30);
+	TEST_ASSERT(evtB->content.val1 == 5);
+	TEST_ASSERT(evtB->content.val2 == 10);
+	TEST_ASSERT(evtB->content.val3);
+	TEST_ASSERT(testedQueue.TAIL == NULL);
+	TEST_ASSERT(testedQueue.noOfEvents == 0);
 }
 
 void run_AddMaximumBasicEventsForGivenMemoryPoolAndPopAllOfThemAndClearGarbage(void)
