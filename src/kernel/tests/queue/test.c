@@ -106,13 +106,16 @@ void run_AddOneBasicEventAndTwoDifferentExtendedEventsAndPopAllOfThemAndClearGar
 	TEST_ASSERT(evt->pendingConsumers == 2);
 	TEST_ASSERT(evt->signalValue == 150);
 	evt->pendingConsumers -= 2;
-	ExtEventVerB evtB = (ExtEventVerB*)testedQueue.pop(&testedQueue);
+	testedQueue.removeGarbage(&testedQueue);
+	ExtEventVerB* evtB = (ExtEventVerB*)testedQueue.pop(&testedQueue);
 	TEST_ASSERT(evtB->baseEvt.eventSize == sizeof(ExtEventVerB));
 	TEST_ASSERT(evtB->baseEvt.pendingConsumers == 1);
 	TEST_ASSERT(evtB->baseEvt.signalValue == 30);
 	TEST_ASSERT(evtB->content.val1 == 5);
 	TEST_ASSERT(evtB->content.val2 == 10);
 	TEST_ASSERT(evtB->content.val3);
+	evtB->baseEvt.pendingConsumers--;
+	testedQueue.removeGarbage(&testedQueue);
 	TEST_ASSERT(testedQueue.TAIL == NULL);
 	TEST_ASSERT(testedQueue.noOfEvents == 0);
 }
