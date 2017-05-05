@@ -1,8 +1,10 @@
 #include <RF_scheduler.h>
+#include <RF_queue.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <RF_definitions.h>
 
-#define MAX_NUMBER_OF_AGENTS 50
+static bool areThereAnyEventsToBeConsumedForAgent(struct RFBaseAgent* currentAgent);
 
 typedef struct
 {
@@ -10,7 +12,7 @@ typedef struct
 	uint32_t numberOfAgents;
 }RFScheduler;
 
-RFAgent* listOfAgentsForSchedulingInstance [MAX_NUMBER_OF_AGENTS] = {NULL};
+RFAgent* listOfAgentsForSchedulingInstance [RF_MAX_NUMBER_OF_AGENTS] = {NULL};
 
 static RFScheduler RFSchedulerObject =
 {
@@ -18,8 +20,8 @@ static RFScheduler RFSchedulerObject =
 		.numberOfAgents = 0,
 };
 
-void startAgent(RFAgent* newAgent, void (*agentCtor)(RFAgent* const self),
-		RF_SchedulerPriority agentPrio)
+void startAgent(struct RFBaseAgent* newAgent, void (*agentCtor)(struct RFBaseAgent* const self),
+		RF_SchedulerPriority agentPrio, RFEvent* memoryPool, size_t memoryPoolSize)
 {
 	assert(newAgent != NULL);
 	assert(agentCtor != NULL);
@@ -27,10 +29,7 @@ void startAgent(RFAgent* newAgent, void (*agentCtor)(RFAgent* const self),
 
 	RFSchedulerObject.agentsList[RFSchedulerObject.numberOfAgents] = newAgent;
 	RFSchedulerObject.numberOfAgents++;
-
-	/**
-	 * Constructing the agent
-	 */
+	createEmptyQueue(&newAgent->FIFOQueue, memoryPool, memoryPoolSize);
 	agentCtor(newAgent);
 }
 
@@ -41,11 +40,24 @@ void runScheduler(void)
 	 * At the moment each agent is equally important and
 	 * they are executed in the same order they were started
 	 */
-	assert(RFSchedulerObject.numberOfAgents > 0 && RFSchedulerObject.numberOfAgents <= MAX_NUMBER_OF_AGENTS);
+	while(1)
+	{
+	assert(RFSchedulerObject.numberOfAgents > 0 && RFSchedulerObject.numberOfAgents <= RF_MAX_NUMBER_OF_AGENTS);
 	uint32_t agentNumber;
 	for(agentNumber = 0; agentNumber < RFSchedulerObject.numberOfAgents; agentNumber++)
 	{
-		RFSchedulerObject.agentsList[agentNumber]->currentHandler
-		(RFSchedulerObject.agentsList[agentNumber],(RFEvent *const)&RFEvent_InitialSignal);
+		RFAgent* currentAgent = RFSchedulerObject.agentsList[agentNumber];
+		if (areThereAnyEventsToBeConsumedForAgent(currentAgent))
+		{
+			currentAgent->currentHandler
+			(currentAgent,(RFEvent *const)currentAgent->FIFOQueue.pop(&currentAgent->FIFOQueue));
+			currentAgent->FIFOQueue.removeGarbage(&currentAgent->FIFOQueue);
+		}
 	}
+	}
+}
+
+bool areThereAnyEventsToBeConsumedForAgent(struct RFBaseAgent* currentAgent)
+{
+	return (currentAgent->FIFOQueue.noOfEvents > 0);
 }

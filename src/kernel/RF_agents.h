@@ -7,24 +7,36 @@
 #define ROBOTIC_FRAMEWORK_AGENTS_H
 
 #include <RF_events.h>
+#include <RF_queue.h>
 
-/**
- * TODO
- * Each agent needs to have RFQueue not RFEvent** eventsPtr
- */
 struct RFBaseAgent
 {
-	RFEvent ** eventsPtr;
-	uint32_t totalStackSize;
-
+	struct RF_BaseQueue FIFOQueue;
 	void (*currentHandler)(struct RFBaseAgent* const self, RFEvent *const evt);
 };
 
-/**
- * TODO: Change in other files using struct RFBaseAgent to RFAgent
- */
 typedef struct RFBaseAgent RFAgent;
 
-void RFBaseAgentConstructor(struct RFBaseAgent* const self);
+/**
+ * TODO
+ * Constructor should have the first transition so that the
+ * scheduler can run it
+ */
+void RFBaseAgentConstructor(RFAgent* const self, void (*initialTransition)(RFAgent* const self, RFEvent *const evt));
+
+#define INITIAL_TRANSITION(me, state) \
+	((RFAgent*)me)->currentHandler = state; \
+	((RFAgent*)me)->currentHandler(me, &RFEvent_InitialSignal);
+
+#define ENTRY_TRANSITION(me, state) \
+	((RFAgent*)me)->currentHandler = state; \
+	((RFAgent*)me)->currentHandler(me, &RFEvent_EntrySignal);
+
+#define EXIT_TRANSITION(me) \
+	((RFAgent*)me)->currentHandler(me, &RFEvent_ExitSignal);
+
+#define EXECUTE_TRANSITION(me, state) \
+	EXIT_TRANSITION(me) \
+	ENTRY_TRANSITION(me, state)
 
 #endif

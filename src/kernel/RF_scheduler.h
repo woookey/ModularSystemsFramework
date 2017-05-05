@@ -11,7 +11,7 @@
 #include <RF_agents.h>
 
 /**
- * Priority has to be assigned during agents construction.
+ * Priority has to be assigned during agents construction
  */
 typedef enum
 {
@@ -27,7 +27,7 @@ typedef enum
  * and ...?What else?
  */
 void startAgent(struct RFBaseAgent* newAgent, void (*agentCtor)(struct RFBaseAgent* const self),
-		RF_SchedulerPriority agentPrio);
+		RF_SchedulerPriority agentPrio, RFEvent* memoryPool, size_t memoryPoolSize);
 
 /**
  * Runs the scheduler on its scheduling policy

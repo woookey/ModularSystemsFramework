@@ -2,10 +2,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
-void RFBaseAgentConstructor(struct RFBaseAgent* const self)
+void RFBaseAgentConstructor(RFAgent* const self, void (*initialTransition)(RFAgent* const self, RFEvent *const evt))
 {
 	assert(self != NULL);
-	self->eventsPtr = NULL;
-	self->totalStackSize = 0;
-	self->currentHandler = NULL;
+	INITIAL_TRANSITION(self, initialTransition);
 }

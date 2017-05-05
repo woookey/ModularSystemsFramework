@@ -16,24 +16,32 @@ RFAgent *const HW_RF_LEDManager = (RFAgent*)&LEDManagerInstance;
  * the scheduler knows that this agent finished its state machine execution(Run to completion)
  */
 static void InitialState(LEDManager* const self, RFEvent *const evt);
+static void LEDOnState(LEDManager* const self, RFEvent *const evt);
+//static void LEDOffState(LEDManager* const self, RFEvent *const evt);
 
 void HW_RF_LEDManagerConstructor(RFAgent *const self)
 {
 	assert(self == HW_RF_LEDManager);
 	LEDManager *const me = (LEDManager*)self;
 
-	RFBaseAgentConstructor((RFAgent*)me);
+	RFBaseAgentConstructor((RFAgent*)me, InitialState);
 	me->LEDParameterForTesting = 5;
-	me->RFbase.currentHandler = InitialState;
 }
 
 void InitialState(LEDManager* const self, RFEvent *const evt)
+{
+	(void)evt;
+	INITIAL_TRANSITION((RFAgent*)&self->RFbase, LEDOnState);
+}
+
+
+void LEDOnState(LEDManager* const self, RFEvent *const evt)
 {
 	switch(evt->signalValue)
 	{
 		case RF_INITIAL_SIGNAL:
 		{
-			printf("LEDManager initial state, parameter = %d\n", self->LEDParameterForTesting);
+			printf("LED switched on\n");
 		}
 	}
 }
