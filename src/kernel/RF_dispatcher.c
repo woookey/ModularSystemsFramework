@@ -5,17 +5,19 @@
 #include <stdio.h>
 #include <assert.h>
 
+typedef RFAgent* RFAgent_t;
+
 typedef struct
 {
 	RF_Queue eventsQueue;
 	uint16_t noOfAgents;
 	uint16_t noOfEvents;
-	RFAgent** subscribers;
+	RFAgent_t* subscribers;
 } RF_Dispatcher;
 
 static struct RF_BaseQueue dispatcherQueue;
 static RFAgent memoryPoolForDispatcherEvents[RF_DISPATCHER_MEMORY_POOL_SIZE];
-static RFAgent* subscribersInstance[RF_MAX_NUMBER_OF_SIGNALS][RF_MAX_NUMBER_OF_AGENTS];
+static RFAgent_t subscribersInstance[RF_MAX_NUMBER_OF_SIGNALS][RF_MAX_NUMBER_OF_AGENTS] = {NULL};
 static RF_Dispatcher dispatcherInstance =
 {
 		.eventsQueue = &dispatcherQueue,
@@ -26,7 +28,7 @@ static RF_Dispatcher dispatcherInstance =
 
 void RF_DispatcherCtor(void)
 {
-	memset(dispatcherInstance.subscribers, 0, sizeof(subscribersInstance));
+	memset(dispatcherInstance.subscribers, NULL, sizeof(subscribersInstance));
 	createEmptyQueue(dispatcherInstance.eventsQueue, memoryPoolForDispatcherEvents,
 			sizeof(RFAgent)*RF_DISPATCHER_MEMORY_POOL_SIZE);
 }
@@ -41,13 +43,37 @@ void postEventToAgent(RFAgent* self, RFEvent const * const evt)
 /**
  * Subscribes an agent to the signal
  */
-void subscribeAgentToSignal(RFAgent* self, uint32_t signalValue)
+void subscribeAgentToSignal(RFAgent* agent, uint32_t signalValue)
 {
-	assert(self != NULL);
+	assert(agent != NULL);
 	assert(signalValue >= 0 && signalValue < RF_MAX_NUMBER_OF_SIGNALS);
+	uint16_t agentSlot;
+	/**
+	 * Do not add the agent if it is already subscribed
+	 */
+	for (agentSlot = 0; agentSlot < RF_MAX_NUMBER_OF_AGENTS; agentSlot++)
+	{
+		if (dispatcherInstance.subscribers[signalValue][agentSlot] == agent)
+		{
+			return;
+		}
+	}
+	for (agentSlot = 0; agentSlot < RF_MAX_NUMBER_OF_AGENTS; agentSlot++)
+	{
+		if (dispatcherInstance.subscribers[signalValue][agentSlot] == (RFEvent*)NULL)
+		{
+			dispatcherInstance.subscribers[signalValue][agentSlot] = agent;
+			return;
+		}
+	}
+	assert(false);
 }
 
 /**
  * Publishes an event
  */
-void publishEvent(RFEvent const* const evt);
+void publishEvent(RFEvent const* const evt)
+{
+	assert(evt != NULL);
+	dispatcherInstance.eventsQueue->push(&dispatcherInstance.eventsQueue, evt, evt->eventSize);
+}
