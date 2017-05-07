@@ -6,6 +6,10 @@ CC = gcc
 CFLAGS = -Wall -g -I${RF_DIR} -I${UNITY_DIR} -c 
 LFLAGS = -Wall -g -I. -I${RF_DIR}
 
+test:
+	make RF_dispatcherUnitTest
+	./RF_dispatcher_UnitTest
+
 RF_dispatcherUnitTest: ${OBJS} ${RF_OBJS}
 	${CC} ${LFLAGS} ${OBJS} ${RF_OBJS} -o RF_dispatcher_UnitTest
 	

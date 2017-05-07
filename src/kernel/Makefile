@@ -27,7 +27,11 @@ RF_queue.o: RF_events.o RF_queue.c RF_queue.h
 	
 RF_events.o: RF_events.c RF_events.h
 	${CC} ${CFLAGS} RF_events.c
-
+	
+test:
+	cd tests/queue; make test
+	cd tests/dispatcher; make test
+	
 clean:
 	rm -rf *.o *~ main
 	cd tests/queue; make clean
