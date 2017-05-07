@@ -4,7 +4,7 @@ CFLAGS = -Wall -g -I. -c
 LFLAGS = -Wall -I.
 CC = gcc
 
-all: ${OBJS} ${RF_OBJS}
+main: ${OBJS} ${RF_OBJS}
 	${CC} ${LFLAGS} ${OBJS} ${RF_OBJS} -o main
 
 main.o: main.c RF_scheduler.o RF_agents.o RF_events.o RF_queue.o LEDManager.o RF_dispatcher.o
@@ -30,4 +30,6 @@ RF_events.o: RF_events.c RF_events.h
 
 clean:
 	rm -rf *.o *~ main
+	cd tests/queue; make clean
+	cd tests/dispatcher; make clean
 	
