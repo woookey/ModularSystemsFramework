@@ -5,19 +5,17 @@
 #include <stdio.h>
 #include <assert.h>
 
-typedef RFAgent* RFAgent_t;
-
 typedef struct
 {
 	RF_Queue eventsQueue;
 	uint16_t noOfAgents;
 	uint16_t noOfEvents;
-	RFAgent_t* subscribers;
+	RFAgent** subscribers;
 } RF_Dispatcher;
 
 static struct RF_BaseQueue dispatcherQueue;
 static RFAgent memoryPoolForDispatcherEvents[RF_DISPATCHER_MEMORY_POOL_SIZE];
-static RFAgent_t subscribersInstance[RF_MAX_NUMBER_OF_SIGNALS][RF_MAX_NUMBER_OF_AGENTS] = {NULL};
+static RFAgent* subscribersInstance[RF_MAX_NUMBER_OF_SIGNALS][RF_MAX_NUMBER_OF_AGENTS] = {NULL};
 static RF_Dispatcher dispatcherInstance =
 {
 		.eventsQueue = &dispatcherQueue,
@@ -53,16 +51,17 @@ void subscribeAgentToSignal(RFAgent* agent, uint32_t signalValue)
 	 */
 	for (agentSlot = 0; agentSlot < RF_MAX_NUMBER_OF_AGENTS; agentSlot++)
 	{
-		if (dispatcherInstance.subscribers[signalValue][agentSlot] == agent)
+		if (&dispatcherInstance.subscribers[signalValue][agentSlot] == agent)
 		{
 			return;
 		}
 	}
 	for (agentSlot = 0; agentSlot < RF_MAX_NUMBER_OF_AGENTS; agentSlot++)
 	{
-		if (dispatcherInstance.subscribers[signalValue][agentSlot] == (RFEvent*)NULL)
+		if (&dispatcherInstance.subscribers[signalValue][agentSlot] == NULL)
 		{
-			dispatcherInstance.subscribers[signalValue][agentSlot] = agent;
+			//&dispatcherInstance.subscribers[signalValue][agentSlot] = (RFAgent*)agent;
+			memcpy(&dispatcherInstance.subscribers[signalValue][agentSlot], &agent, sizeof(RFAgent*));
 			return;
 		}
 	}
