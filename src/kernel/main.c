@@ -17,7 +17,9 @@ int main()
 	startAgent(HW_RF_LEDManager, HW_RF_LEDManagerConstructor, AGENT_PRIORITY_0, &LEDManagerMemoryPool[0], 20*sizeof(RFEvent));
 	/**
 	 * TODO
-	 * Posting first event to agent has to be fixed!
+	 * 1) Posting first event to agent has to be fixed!
+	 * 2) Dispatcher needs to be assigned with number of
+	 * registered events and agents before scheduler is ran
 	 */
 	runRFKernel();
 	return 0;
