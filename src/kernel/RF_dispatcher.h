@@ -17,6 +17,16 @@
 void RF_DispatcherCtor(void);
 
 /**
+ * Registers number of expected events to improve performance
+ */
+void RF_Dispatcher_RegisterNumberOfEvents(uint16_t noOfExpectedEvents);
+
+/**
+ * Registers number of agents to improve performance
+ */
+void RF_Dispatcher_RegisterNumberOfAgents(uint16_t noOfExpectedAgents);
+
+/**
  * Posts event directly to the agent's queue
  *
  * Note: This should only be used to post an event to itself
@@ -29,7 +39,12 @@ void postEventToAgent(RFAgent* self, RFEvent const * const evt);
 void subscribeAgentToSignal(RFAgent* self, uint32_t signalValue);
 
 /**
- * Publishes an event
+ * Unsubscribes an agent to the signal
+ */
+void unsubscribeAgentToSignal(RFAgent* self, uint32_t signalValue);
+
+/**
+ * Publishes an event and dispatches to all subscribed agents
  */
 void publishEvent(RFEvent const* const evt);
 

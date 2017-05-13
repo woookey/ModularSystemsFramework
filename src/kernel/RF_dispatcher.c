@@ -5,37 +5,47 @@
 #include <stdio.h>
 #include <assert.h>
 
+#define NUMBER_OF_SIGNALS_REQUIRED_BY_FRAMEWORK RF_LAST_SIGNAL
+
 typedef struct
 {
-	RF_Queue eventsQueue;
-	uint16_t noOfAgents;
-	uint16_t noOfEvents;
-	RFAgent** subscribers;
+	uint16_t noOfRegisteredAgents;
+	uint16_t noOfRegisteredSignals;
+	//RFAgent** subscribers;
 } RF_Dispatcher;
 
-static struct RF_BaseQueue dispatcherQueue;
-static RFAgent memoryPoolForDispatcherEvents[RF_DISPATCHER_MEMORY_POOL_SIZE];
 static RFAgent* subscribersInstance[RF_MAX_NUMBER_OF_SIGNALS][RF_MAX_NUMBER_OF_AGENTS] = {NULL};
-static RF_Dispatcher dispatcherInstance =
-{
-		.eventsQueue = &dispatcherQueue,
-		.noOfAgents = 0,
-		.noOfEvents = 0,
+static RF_Dispatcher dispatcherInstance;
+/*{
 		.subscribers = subscribersInstance,
-};
+};*/
 
 void RF_DispatcherCtor(void)
 {
-	memset(dispatcherInstance.subscribers, NULL, sizeof(subscribersInstance));
-	createEmptyQueue(dispatcherInstance.eventsQueue, memoryPoolForDispatcherEvents,
-			sizeof(RFAgent)*RF_DISPATCHER_MEMORY_POOL_SIZE);
+	memset(subscribersInstance, NULL,
+			sizeof(RFAgent*)*RF_MAX_NUMBER_OF_SIGNALS*RF_MAX_NUMBER_OF_AGENTS);
+	memset(&dispatcherInstance, 0, sizeof(RF_Dispatcher));
+	dispatcherInstance.noOfRegisteredAgents = 0;
+	dispatcherInstance.noOfRegisteredSignals = NUMBER_OF_SIGNALS_REQUIRED_BY_FRAMEWORK;
+}
+
+void RF_Dispatcher_RegisterNumberOfEvents(uint16_t noOfExpectedEvents)
+{
+	assert(noOfExpectedEvents > 0 && noOfExpectedEvents <= RF_MAX_NUMBER_OF_SIGNALS);
+	dispatcherInstance.noOfRegisteredSignals = noOfExpectedEvents;
+}
+
+void RF_Dispatcher_RegisterNumberOfAgents(uint16_t noOfExpectedAgents)
+{
+	assert(noOfExpectedAgents > 0 && noOfExpectedAgents <= RF_MAX_NUMBER_OF_AGENTS);
+	dispatcherInstance.noOfRegisteredAgents = noOfExpectedAgents;
 }
 
 void postEventToAgent(RFAgent* self, RFEvent const * const evt)
 {
 	assert(self != NULL);
 	assert(evt != NULL);
-	self->FIFOQueue.push(&self->FIFOQueue, evt, evt->eventSize);
+	self->FIFOQueue.push(&self->FIFOQueue, (RFEvent*)evt, evt->eventSize);
 }
 
 /**
@@ -44,35 +54,59 @@ void postEventToAgent(RFAgent* self, RFEvent const * const evt)
 void subscribeAgentToSignal(RFAgent* agent, uint32_t signalValue)
 {
 	assert(agent != NULL);
-	assert(signalValue >= 0 && signalValue < RF_MAX_NUMBER_OF_SIGNALS);
+	assert(signalValue >= 0 && signalValue <= dispatcherInstance.noOfRegisteredSignals);
 	uint16_t agentSlot;
 	/**
 	 * Do not add the agent if it is already subscribed
 	 */
-	for (agentSlot = 0; agentSlot < RF_MAX_NUMBER_OF_AGENTS; agentSlot++)
+	for (agentSlot = 0; agentSlot < dispatcherInstance.noOfRegisteredAgents; agentSlot++)
 	{
-		if (&dispatcherInstance.subscribers[signalValue][agentSlot] == agent)
+		if (subscribersInstance[signalValue][agentSlot] == agent)
 		{
+			printf("Agent already allocated at (%d, %d)\n", signalValue, agentSlot);
 			return;
 		}
 	}
-	for (agentSlot = 0; agentSlot < RF_MAX_NUMBER_OF_AGENTS; agentSlot++)
+	for (agentSlot = 0; agentSlot < dispatcherInstance.noOfRegisteredAgents; agentSlot++)
 	{
-		if (&dispatcherInstance.subscribers[signalValue][agentSlot] == NULL)
+		if (subscribersInstance[signalValue][agentSlot] == NULL)
 		{
-			//&dispatcherInstance.subscribers[signalValue][agentSlot] = (RFAgent*)agent;
-			memcpy(&dispatcherInstance.subscribers[signalValue][agentSlot], &agent, sizeof(RFAgent*));
+			printf("Agent will be allocated at (%d, %d)\n", signalValue, agentSlot);
+			subscribersInstance[signalValue][agentSlot] = agent;
 			return;
 		}
 	}
 	assert(false);
 }
 
-/**
- * Publishes an event
- */
+void unsubscribeAgentToSignal(RFAgent* self, uint32_t signalValue)
+{
+	assert(self != NULL);
+	assert(signalValue >= 0 && signalValue <= dispatcherInstance.noOfRegisteredSignals);
+	uint16_t agentSlot;
+	for (agentSlot = 0; agentSlot < dispatcherInstance.noOfRegisteredAgents; agentSlot++)
+	{
+		if (subscribersInstance[signalValue][agentSlot] == self)
+		{
+			subscribersInstance[signalValue][agentSlot] = NULL;
+			/**
+			 * TODO:
+			 * Shift the memory to the left by one agent to align with subscribed agents
+			 */
+		}
+	}
+}
+
 void publishEvent(RFEvent const* const evt)
 {
 	assert(evt != NULL);
-	dispatcherInstance.eventsQueue->push(&dispatcherInstance.eventsQueue, evt, evt->eventSize);
+	uint16_t agentSlot;
+	for (agentSlot = 0; agentSlot < dispatcherInstance.noOfRegisteredAgents; agentSlot++)
+	{
+		if (subscribersInstance[evt->signalValue][agentSlot] != NULL)
+		{
+			RFAgent* subscribedAgent = subscribersInstance[evt->signalValue][agentSlot];
+			subscribedAgent->FIFOQueue.push(&subscribedAgent->FIFOQueue, (RFEvent*)evt, evt->eventSize);
+		}
+	}
 }
