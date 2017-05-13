@@ -1,6 +1,10 @@
 DEV_DIR = /home/wookie/Development/ARMDev
 KERNEL_DIR = ${DEV_DIR}/src/kernel
 
+all:
+	make build_kernel
+	make test_kernel
+
 build_kernel:
 	cd ${KERNEL_DIR}; make main
 	mkdir -p bld/
