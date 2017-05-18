@@ -74,8 +74,8 @@ void removeGarbageFromQueue(struct RF_BaseQueue* self)
 		{
 			uint64_t sizeToShiftTAILLeft = (uint64_t)self->HEAD->eventSize;
 			size_t spaceToBeFreed = self->HEAD->eventSize;
-			memmove(self->HEAD, (uint64_t)self->HEAD+(uint64_t)self->HEAD->eventSize, self->totalSize - self->HEAD->eventSize);
-			self->TAIL = (uint64_t)self->TAIL - (uint64_t)sizeToShiftTAILLeft;
+			memmove((void*)self->HEAD, (void*)((uint64_t)self->HEAD+(uint64_t)self->HEAD->eventSize), self->totalSize - self->HEAD->eventSize);
+			self->TAIL = (RFEvent *)((uint64_t)self->TAIL - (uint64_t)sizeToShiftTAILLeft);
 			self->spaceLeft += spaceToBeFreed;
 		}
 		else if (self->noOfEvents == 1)
