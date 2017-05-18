@@ -16,4 +16,9 @@ void initiateTestingUtilities(void);
  */
 uint8_t testingUtils_GetRandomUint8(void);
 
+/**
+ * Generates a randomised uint32_t value
+ */
+uint32_t testingUtils_GetRandomUint32(void);
+
 #endif
