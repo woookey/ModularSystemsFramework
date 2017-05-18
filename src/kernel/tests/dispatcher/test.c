@@ -31,9 +31,9 @@ static RFEvent memoryPoolTwo[SIZE_OF_MEMORY_POOL_IN_EVENTS];
 static void agentSampleCurrentHandler(struct RFBaseAgent* const self, RFEvent *const evt);
 static void agentSampleCurrentHandlerTwo(struct RFBaseAgent* const self, RFEvent *const evt);
 
-static void run_PostingEventToItself(void);
 static void run_SampleAgentIsSubscribedToSampleEventAndSampleEventIsPublished(void);
 static void run_SampleAgentIsSubscribedToSampleEventsAndTwoDifferentSampleEventsArePublished(void);
+static void run_SampleAgentUnsubscribesToSampleEvent(void);
 static void run_TwoAgentsAreSubscribedToSampleEventsWhichAreBeingPublishedAndOneUnsubscribes(void);
 static void run_TwoAgentAreUnsubscribedToEventAndEventIsPublished(void);
 
@@ -43,12 +43,27 @@ static void consumeEventsBySampleAgentTwo(void);
 
 int main() {
 	UNITY_BEGIN();
-	RUN_TEST(run_PostingEventToItself);
 	RUN_TEST(run_SampleAgentIsSubscribedToSampleEventAndSampleEventIsPublished);
 	RUN_TEST(run_SampleAgentIsSubscribedToSampleEventsAndTwoDifferentSampleEventsArePublished);
+	RUN_TEST(run_SampleAgentUnsubscribesToSampleEvent);
 	RUN_TEST(run_TwoAgentsAreSubscribedToSampleEventsWhichAreBeingPublishedAndOneUnsubscribes);
 	RUN_TEST(run_TwoAgentAreUnsubscribedToEventAndEventIsPublished);
 	return UNITY_END();
+}
+
+void run_SampleAgentUnsubscribesToSampleEvent(void)
+{
+	clearVariables();
+	RF_Dispatcher_RegisterNumberOfEvents(REGISTERED_SIGNALS);
+	RF_Dispatcher_RegisterNumberOfAgents(1);
+	subscribeAgentToSignal(&agentSample, sampleEvtTwo.signalValue);
+	publishEvent(&sampleEvtTwo);
+	consumeEventsBySampleAgent();
+	TEST_ASSERT(noOfCallsToSampleAgent == 1);
+	unsubscribeAgentToSignal(&agentSample, sampleEvtTwo.signalValue);
+	publishEvent(&sampleEvtTwo);
+	consumeEventsBySampleAgent();
+	TEST_ASSERT(noOfCallsToSampleAgent == 1);
 }
 
 void run_TwoAgentAreUnsubscribedToEventAndEventIsPublished(void)
@@ -124,25 +139,6 @@ void run_SampleAgentIsSubscribedToSampleEventAndSampleEventIsPublished(void)
 	TEST_ASSERT(noOfCallsToSampleAgent == 1);
 }
 
-void run_PostingEventToItself(void)
-{
-	clearVariables();
-	const RFEvent evt =
-	{
-			.eventSize = sizeof(RFEvent),
-			.pendingConsumers = 0,
-			.signalValue = 15,
-	};
-	uint8_t noOfPosts = testingUtils_GetRandomUint8();
-	uint8_t expectedNumberOfCalls;
-	for (expectedNumberOfCalls = 1; expectedNumberOfCalls < noOfPosts; expectedNumberOfCalls++)
-	{
-		postEventToAgent(&agentSample, &evt);
-		consumeEventsBySampleAgent();
-		TEST_ASSERT(noOfCallsToSampleAgent == expectedNumberOfCalls);
-	}
-}
-
 void clearVariables(void)
 {
 	initiateTestingUtilities();
@@ -150,8 +146,10 @@ void clearVariables(void)
 	memset(&agentSampleTwo, 0 , sizeof(RFAgent));
 	createEmptyQueue(&agentSample.FIFOQueue, memoryPool, sizeof(RFEvent)*SIZE_OF_MEMORY_POOL_IN_EVENTS);
 	RFBaseAgentConstructor((RFAgent *const)&agentSample, &agentSampleCurrentHandler);
+	consumeEventsBySampleAgent();
 	createEmptyQueue(&agentSampleTwo.FIFOQueue, memoryPoolTwo, sizeof(RFEvent)*SIZE_OF_MEMORY_POOL_IN_EVENTS);
 	RFBaseAgentConstructor((RFAgent *const)&agentSampleTwo, &agentSampleCurrentHandlerTwo);
+	consumeEventsBySampleAgentTwo();
 	RF_DispatcherCtor();
 	noOfCallsToSampleAgent = 0;
 	noOfCallsToSampleAgentTwo = 0;

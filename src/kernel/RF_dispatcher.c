@@ -41,13 +41,6 @@ void RF_Dispatcher_RegisterNumberOfAgents(uint16_t noOfExpectedAgents)
 	dispatcherInstance.noOfRegisteredAgents = noOfExpectedAgents;
 }
 
-void postEventToAgent(RFAgent* self, RFEvent const * const evt)
-{
-	assert(self != NULL);
-	assert(evt != NULL);
-	self->FIFOQueue.push(&self->FIFOQueue, (RFEvent*)evt, evt->eventSize);
-}
-
 /**
  * Subscribes an agent to the signal
  */

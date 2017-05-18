@@ -27,13 +27,6 @@ void RF_Dispatcher_RegisterNumberOfEvents(uint16_t noOfExpectedEvents);
 void RF_Dispatcher_RegisterNumberOfAgents(uint16_t noOfExpectedAgents);
 
 /**
- * Posts event directly to the agent's queue
- *
- * Note: This should only be used to post an event to itself
- */
-void postEventToAgent(RFAgent* self, RFEvent const * const evt);
-
-/**
  * Subscribes an agent to the signal
  */
 void subscribeAgentToSignal(RFAgent* self, uint32_t signalValue);
