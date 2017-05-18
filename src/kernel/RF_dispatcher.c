@@ -11,14 +11,10 @@ typedef struct
 {
 	uint16_t noOfRegisteredAgents;
 	uint16_t noOfRegisteredSignals;
-	//RFAgent** subscribers;
 } RF_Dispatcher;
 
 static RFAgent* subscribersInstance[RF_MAX_NUMBER_OF_SIGNALS][RF_MAX_NUMBER_OF_AGENTS] = {NULL};
 static RF_Dispatcher dispatcherInstance;
-/*{
-		.subscribers = subscribersInstance,
-};*/
 
 void RF_DispatcherCtor(void)
 {
@@ -56,7 +52,6 @@ void subscribeAgentToSignal(RFAgent* agent, uint32_t signalValue)
 	{
 		if (subscribersInstance[signalValue][agentSlot] == agent)
 		{
-			printf("Agent already allocated at (%d, %d)\n", signalValue, agentSlot);
 			return;
 		}
 	}
@@ -64,7 +59,6 @@ void subscribeAgentToSignal(RFAgent* agent, uint32_t signalValue)
 	{
 		if (subscribersInstance[signalValue][agentSlot] == NULL)
 		{
-			printf("Agent will be allocated at (%d, %d)\n", signalValue, agentSlot);
 			subscribersInstance[signalValue][agentSlot] = agent;
 			return;
 		}

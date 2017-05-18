@@ -34,9 +34,11 @@ RF_events.o: RF_events.c RF_events.h
 test:
 	cd tests/queue; make test
 	cd tests/dispatcher; make test
+	cd tests/timers; make test
 	
 clean:
 	rm -rf *.o *~ main
 	cd tests/queue; make clean
 	cd tests/dispatcher; make clean
+	cd tests/timers; make clean
 	

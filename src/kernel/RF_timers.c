@@ -35,20 +35,38 @@ void RFTimerConstructor(RFAgent* agentSubscribed, RF_Timer* timer, uint32_t sign
 	assert(REGISTER_TIMER(timer));
 }
 
-/**
- * Arms the timer to a specified timeout in construction
- */
 void RFTimer_armTimer(RF_Timer *timer, uint32_t timeoutInTicks)
 {
 	assert(timer != NULL);
 	assert(timeoutInTicks > 0);
 	timer->ticks = timeoutInTicks;
+	timer->isArmed = true;
 }
 
-/**
- * Disarms the timer
- */
-void RFTimer_disarmTimer(RF_Timer *timer);
+void RFTimer_disarmTimer(RF_Timer *timer)
+{
+	assert(timer != NULL);
+	timer->ticks = 0;
+	timer->isArmed = false;
+}
+
+void RFTimer_decreaseTimersByOneTick(void)
+{
+	uint16_t timer_i = 0;
+	while(timer_i < RFRegisteredTimers.noOfRegisteredTimers)
+	{
+		RF_Timer* currentTimer = RFRegisteredTimers.registeredTimers[timer_i];
+		if (currentTimer->isArmed)
+		{
+			if (--currentTimer->ticks == 0)
+			{
+				currentTimer->agent->FIFOQueue.push(&currentTimer->agent->FIFOQueue,
+						&currentTimer->baseEvt, currentTimer->baseEvt.eventSize);
+				currentTimer->isArmed = false;
+			}
+		}
+	}
+}
 
 bool add_timer(RF_Timer* timerPtr)
 {

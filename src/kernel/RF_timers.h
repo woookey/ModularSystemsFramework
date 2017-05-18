@@ -34,4 +34,9 @@ void RFTimer_armTimer(RF_Timer *timer, uint32_t timeoutInTicks);
  */
 void RFTimer_disarmTimer(RF_Timer *timer);
 
+/**
+ * Decreases all registered and armed timers by one tick
+ */
+void RFTimer_decreaseTimersByOneTick(void);
+
 #endif
