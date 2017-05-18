@@ -19,7 +19,10 @@ RF_scheduler.o: RF_agents.o RF_scheduler.h RF_scheduler.c RF_events.o RF_queue.o
 RF_dispatcher.o: RF_agents.o RF_queue.o RF_events.o RF_dispatcher.h RF_dispatcher.c RF_definitions.h
 	${CC} ${CFLAGS} RF_dispatcher.c
 
-RF_agents.o: RF_agents.c RF_agents.h RF_events.o RF_queue.o RF_queue.o
+RF_timers.o: RF_timers.c RF_timers.h RF_agents.o RF_events.o
+	${CC} ${CFLAGS} RF_timers.c
+
+RF_agents.o: RF_agents.c RF_agents.h RF_events.o RF_queue.o
 	${CC} ${CFLAGS} RF_agents.c
 	
 RF_queue.o: RF_events.o RF_queue.c RF_queue.h
