@@ -39,4 +39,10 @@ void RFTimer_disarmTimer(RF_Timer *timer);
  */
 void RFTimer_decreaseTimersByOneTick(void);
 
+/**
+ * Clears all timers
+ * TODO: For future destruct specific timers instead all of them
+ */
+void RFTimer_clearAllTimers(void);
+
 #endif

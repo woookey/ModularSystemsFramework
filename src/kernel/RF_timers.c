@@ -3,6 +3,10 @@
 #include <assert.h>
 #include <stddef.h>
 #include <string.h>
+/**
+ * TODO: remove stdio when no printf
+ */
+#include <stdio.h>
 
 /**
  * TODO: There needs to be an array with pointers to all constructed
@@ -58,13 +62,16 @@ void RFTimer_decreaseTimersByOneTick(void)
 		RF_Timer* currentTimer = RFRegisteredTimers.registeredTimers[timer_i];
 		if (currentTimer->isArmed)
 		{
+			//printf("Decreasing timer(%d)\n", timer_i);
 			if (--currentTimer->ticks == 0)
 			{
+				//printf("Pushing timer(%d)\n", timer_i);
 				currentTimer->agent->FIFOQueue.push(&currentTimer->agent->FIFOQueue,
 						&currentTimer->baseEvt, currentTimer->baseEvt.eventSize);
 				currentTimer->isArmed = false;
 			}
 		}
+		timer_i++;
 	}
 }
 
@@ -78,4 +85,10 @@ bool add_timer(RF_Timer* timerPtr)
 		return true;
 	}
 	return false;
+}
+
+void RFTimer_clearAllTimers(void)
+{
+	memset(&RFRegisteredTimers.registeredTimers, NULL, sizeof(RF_Timer*)*RF_MAX_NUMBER_OF_TIMERS);
+	RFRegisteredTimers.noOfRegisteredTimers = 0;
 }
