@@ -1,14 +1,23 @@
 DEV_DIR = /home/wookie/Development/ARMDev
-KERNEL_DIR = ${DEV_DIR}/src/kernel
+CUR_DIR = $(shell pwd)
+KERNEL_DIR = ${CUR_DIR}/src/kernel
+TARGET_BUILD = ${CUR_DIR}/src/target/discoveryf4
+
 
 all:
 	make build_kernel
 	make test_kernel
 
+build_target:
+	cd ${TARGET_BUILD}; make ARM_main
+	mkdir -p bld/target
+	cp ${TARGET_BUILD}/ARM_main.axf ${CUR_DIR}/bld/target
+	cp ${TARGET_BUILD}/ARM_main.bin ${CUR_DIR}/bld/target
+
 build_kernel:
 	cd ${KERNEL_DIR}; make main
 	mkdir -p bld/
-	cp ${KERNEL_DIR}/main ${DEV_DIR}/bld
+	cp ${KERNEL_DIR}/main ${CUR_DIR}/bld
 	
 test_kernel:
 	cd ${KERNEL_DIR}; make test
@@ -16,3 +25,4 @@ test_kernel:
 clean:
 	rm -rf bld
 	cd ${KERNEL_DIR}; make clean
+	cd ${TARGET_BUILD}; make clean
