@@ -1,17 +1,20 @@
 RF_OBJS = RF_agents.o RF_scheduler.o RF_events.o RF_queue.o RF_dispatcher.o
-OBJS = main.o LEDManager.o
+OBJS = main.o LEDManagerTest.o
 CFLAGS = -Wall -g -I. -c
 LFLAGS = -Wall -I.
 CC = gcc
+CC_TARGET = arm-none-eabi-gcc
+
+RF_kernel: ${RF_OBJS}
 
 main: ${OBJS} ${RF_OBJS}
 	${CC} ${LFLAGS} ${OBJS} ${RF_OBJS} -o main
 
-main.o: main.c RF_scheduler.o RF_agents.o RF_events.o RF_queue.o LEDManager.o RF_dispatcher.o
+main.o: main.c RF_scheduler.o RF_agents.o RF_events.o RF_queue.o LEDManagerTest.o RF_dispatcher.o
 	${CC} ${CFLAGS} main.c
 	
-LEDManager.o: LEDManager.c LEDManager.h RF_events.o RF_agents.o RF_queue.o
-	${CC} ${CFLAGS} LEDManager.c
+LEDManagerTest.o: LEDManagerTest.c LEDManagerTest.h RF_events.o RF_agents.o RF_queue.o
+	${CC} ${CFLAGS} LEDManagerTest.c
 
 RF_scheduler.o: RF_agents.o RF_scheduler.h RF_scheduler.c RF_events.o RF_queue.o
 	${CC} ${CFLAGS} RF_scheduler.c
