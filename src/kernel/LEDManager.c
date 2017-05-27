@@ -16,8 +16,8 @@ RFAgent *const HW_RF_LEDManager = (RFAgent*)&LEDManagerInstance;
  * TODO: InitialState should be returning something so that
  * the scheduler knows that this agent finished its state machine execution(Run to completion)
  */
-static void InitialState(LEDManager* const self, RFEvent *const evt);
-static void LEDOnState(LEDManager* const self, RFEvent *const evt);
+static RFHandle InitialState(LEDManager* const self, RFEvent *const evt);
+static RFHandle LEDOnState(LEDManager* const self, RFEvent *const evt);
 //static void LEDOffState(LEDManager* const self, RFEvent *const evt);
 
 static void generateSignalFourAndPostToItself(LEDManager* const self);
@@ -31,14 +31,14 @@ void HW_RF_LEDManagerConstructor(RFAgent *const self)
 	me->LEDParameterForTesting = 5;
 }
 
-void InitialState(LEDManager* const self, RFEvent *const evt)
+RFHandle InitialState(LEDManager* const self, RFEvent *const evt)
 {
 	(void)evt;
 	INITIAL_TRANSITION((RFAgent*)&self->RFbase, LEDOnState);
 }
 
 
-void LEDOnState(LEDManager* const self, RFEvent *const evt)
+RFHandle LEDOnState(LEDManager* const self, RFEvent *const evt)
 {
 
 	switch(evt->signalValue)
@@ -47,16 +47,17 @@ void LEDOnState(LEDManager* const self, RFEvent *const evt)
 		{
 			printf("LED switched on\n");
 			generateSignalFourAndPostToItself(self);
-			break;
+			return RF_HANDLED;
 		}
 		case 4:
 		{
 			printf("Received event: %d\n", evt->signalValue);
-			break;
+			return RF_HANDLED;
 		}
 		default:
 		{
 			printf("Received default event: %d\n", evt->signalValue);
+			return RF_HANDLED;
 		}
 	}
 }

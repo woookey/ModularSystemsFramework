@@ -9,7 +9,7 @@ void postEventToAgent(RFAgent* self, RFEvent const * const evt)
 	self->FIFOQueue.push(&self->FIFOQueue, (RFEvent*)evt, evt->eventSize);
 }
 
-void RFBaseAgentConstructor(RFAgent* const self, void (*initialTransition)(RFAgent* const self, RFEvent *const evt))
+void RFBaseAgentConstructor(RFAgent* const self, RFHandle (*initialTransition)(RFAgent* const self, RFEvent *const evt))
 {
 	assert(self != NULL);
 	self->currentHandler = initialTransition;

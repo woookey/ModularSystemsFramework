@@ -49,8 +49,10 @@ void runScheduler(void)
 		RFAgent* currentAgent = RFSchedulerObject.agentsList[agentNumber];
 		if (areThereAnyEventsToBeConsumedForAgent(currentAgent))
 		{
-			currentAgent->currentHandler
+			RFHandle returnHandle;
+			returnHandle = currentAgent->currentHandler
 			(currentAgent,(RFEvent *const)currentAgent->FIFOQueue.pop(&currentAgent->FIFOQueue));
+			assert(returnHandle == RF_HANDLED || returnHandle == RF_UNHANDLED);
 			currentAgent->FIFOQueue.removeGarbage(&currentAgent->FIFOQueue);
 		}
 	}
