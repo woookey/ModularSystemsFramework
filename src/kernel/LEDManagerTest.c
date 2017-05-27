@@ -1,44 +1,40 @@
-#include <LEDManager.h>
 #include <assert.h>
 #include <stdio.h>
 #include <RF_dispatcher.h>
+#include "LEDManagerTest.h"
 
 typedef struct
 {
 	RFAgent RFbase;
 	uint32_t LEDParameterForTesting;
-}LEDManager;
+}LEDManagerTest;
 
-LEDManager LEDManagerInstance;
-RFAgent *const HW_RF_LEDManager = (RFAgent*)&LEDManagerInstance;
+LEDManagerTest LEDManagerTestInstance;
+RFAgent *const HW_RF_LEDManagerTest = (RFAgent*)&LEDManagerTestInstance;
 
-/**
- * TODO: InitialState should be returning something so that
- * the scheduler knows that this agent finished its state machine execution(Run to completion)
- */
-static RFHandle InitialState(LEDManager* const self, RFEvent *const evt);
-static RFHandle LEDOnState(LEDManager* const self, RFEvent *const evt);
+static RFHandle InitialState(LEDManagerTest* const self, RFEvent *const evt);
+static RFHandle LEDOnState(LEDManagerTest* const self, RFEvent *const evt);
 //static void LEDOffState(LEDManager* const self, RFEvent *const evt);
 
-static void generateSignalFourAndPostToItself(LEDManager* const self);
+static void generateSignalFourAndPostToItself(LEDManagerTest* const self);
 
-void HW_RF_LEDManagerConstructor(RFAgent *const self)
+void HW_RF_LEDManagerTestConstructor(RFAgent *const self)
 {
-	assert(self == HW_RF_LEDManager);
-	LEDManager *const me = (LEDManager*)self;
+	assert(self == HW_RF_LEDManagerTest);
+	LEDManagerTest *const me = (LEDManagerTest*)self;
 
-	RFBaseAgentConstructor((RFAgent*)me, InitialState);
+	RFBaseAgentConstructor((RFAgent*)me, &InitialState);
 	me->LEDParameterForTesting = 5;
 }
 
-RFHandle InitialState(LEDManager* const self, RFEvent *const evt)
+RFHandle InitialState(LEDManagerTest* const self, RFEvent *const evt)
 {
 	(void)evt;
 	INITIAL_TRANSITION((RFAgent*)&self->RFbase, LEDOnState);
 }
 
 
-RFHandle LEDOnState(LEDManager* const self, RFEvent *const evt)
+RFHandle LEDOnState(LEDManagerTest* const self, RFEvent *const evt)
 {
 
 	switch(evt->signalValue)
@@ -62,7 +58,7 @@ RFHandle LEDOnState(LEDManager* const self, RFEvent *const evt)
 	}
 }
 
-void generateSignalFourAndPostToItself(LEDManager* const self)
+void generateSignalFourAndPostToItself(LEDManagerTest* const self)
 {
 	static RFEvent LEDEvent =
 	{
