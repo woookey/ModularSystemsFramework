@@ -17,6 +17,8 @@
  * @param signalValue, value of the signal
  * @param pendingConsumers, number of agents that still
  * need to consume this event
+ *
+ * TODO: pendingConsumers should be deleted - not needed really
  */
 typedef struct
 {

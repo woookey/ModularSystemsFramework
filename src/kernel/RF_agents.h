@@ -43,6 +43,10 @@ void postEventToAgent(RFAgent* self, RFEvent const * const evt);
 #define EXIT_TRANSITION(me) \
 	(void)((RFAgent*)me)->currentHandler(me, &RFEvent_ExitSignal);
 
+/**
+ * TODO: Execute transition does not work
+ * To be unit tested!
+ */
 #define EXECUTE_TRANSITION(me, state) \
 	EXIT_TRANSITION(me) \
 	ENTRY_TRANSITION(me, state) \
