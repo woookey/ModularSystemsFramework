@@ -9,6 +9,11 @@ all:
 	make build_kernel
 	make test_kernel
 
+build_synthetic:
+	cd ${KERNEL_DIR}; make RF_kernel
+	cd ${COMPONENTS_DIR}; make build_components_synthetic
+	cd ${TARGET_BUILD}; make build_synthetic
+
 build_target:
 	cd ${COMPONENTS_DIR}; make build_components_target
 	cd ${TARGET_BUILD}; make ARM_main
