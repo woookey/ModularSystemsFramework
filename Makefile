@@ -13,6 +13,8 @@ build_synthetic:
 	cd ${KERNEL_DIR}; make RF_kernel
 	cd ${COMPONENTS_DIR}; make build_components_synthetic
 	cd ${TARGET_BUILD}; make build_synthetic
+	mkdir -p bld/synthetic/
+	cp ${TARGET_BUILD}/ARM_main ${CUR_DIR}/bld/synthetic
 
 build_target:
 	cd ${COMPONENTS_DIR}; make build_components_target

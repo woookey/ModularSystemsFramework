@@ -15,6 +15,8 @@ LFLAGS = -T ${LINKER_SCRIPT} -L ${LINKER_PATH}
 
 INCLUDE_DIRS = -I./
 INCLUDE_DIRS +=  -I../../components/LEDManager/
+INCLUDE_DIRS += -I../../system/
+INCLUDE_DIRS += -I../../kernel/
 
 DEPENDENCIES = ../../components/LEDManager/fakeLED.o
 
@@ -34,7 +36,7 @@ ARM_main: ${DEPENDENCIES}
 	
 build_synthetic: ../../components/LEDManager/LEDManager.o ${KERNEL_OBJS} 
 	${CC_SYNTHETIC} -g -Wall ${CFLAGS} ${INCLUDE_DIRS} ../../components/LEDManager/LEDManager.o \
-	ARM_main_synth.c ${KERNEL_OBJS} -o ARM_main
+	${KERNEL_OBJS} ARM_main_synth.c -o ARM_main
 	
 clean:
 	rm -rf *~ *.axf *.bin ARM_main
