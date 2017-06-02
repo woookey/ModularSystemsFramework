@@ -4,24 +4,22 @@ KERNEL_DIR = ${CUR_DIR}/src/kernel
 TARGET_BUILD = ${CUR_DIR}/src/target/discoveryf4
 COMPONENTS_DIR = ${CUR_DIR}/src/components
 
-
-all:
-	make build_kernel
-	make test_kernel
-
 build_synthetic:
+	make clean
 	cd ${KERNEL_DIR}; make RF_kernel
-	cd ${COMPONENTS_DIR}; make build_components_synthetic
+	cd ${COMPONENTS_DIR}; make build_components CC=gcc
 	cd ${TARGET_BUILD}; make build_synthetic
 	mkdir -p bld/synthetic/
-	cp ${TARGET_BUILD}/ARM_main ${CUR_DIR}/bld/synthetic
+	cp ${TARGET_BUILD}/ARM_main_synth ${CUR_DIR}/bld/synthetic
 
 build_target:
-	cd ${COMPONENTS_DIR}; make build_components_target
+	make clean
+	cd ${KERNEL_DIR}; make RF_kernel CC=arm-none-eabi-gcc
+	cd ${COMPONENTS_DIR}; make build_components CC=arm-none-eabi-gcc
 	cd ${TARGET_BUILD}; make ARM_main
 	mkdir -p bld/target
-	cp ${TARGET_BUILD}/ARM_main.axf ${CUR_DIR}/bld/target
-	cp ${TARGET_BUILD}/ARM_main.bin ${CUR_DIR}/bld/target
+	cp ${TARGET_BUILD}/ARM_main_stm32.axf ${CUR_DIR}/bld/target
+	cp ${TARGET_BUILD}/ARM_main_stm32.bin ${CUR_DIR}/bld/target
 
 build_kernel:
 	cd ${KERNEL_DIR}; make main
@@ -31,9 +29,6 @@ build_kernel:
 test_kernel:
 	cd ${KERNEL_DIR}; make test
 	
-build_LEDManager_synthetic:
-	cd ${COMPONENTS_DIR}; make LEDManager_synthetic
-
 clean:
 	rm -rf bld
 	cd ${KERNEL_DIR}; make clean
