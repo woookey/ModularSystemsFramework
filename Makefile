@@ -16,7 +16,7 @@ build_target:
 	make clean
 	cd ${KERNEL_DIR}; make RF_kernel CC=arm-none-eabi-gcc
 	cd ${COMPONENTS_DIR}; make build_components CC=arm-none-eabi-gcc
-	cd ${TARGET_BUILD}; make ARM_main
+	cd ${TARGET_BUILD}; make build_target
 	mkdir -p bld/target
 	cp ${TARGET_BUILD}/ARM_main_stm32.axf ${CUR_DIR}/bld/target
 	cp ${TARGET_BUILD}/ARM_main_stm32.bin ${CUR_DIR}/bld/target

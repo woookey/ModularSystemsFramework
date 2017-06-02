@@ -18,7 +18,7 @@ INCLUDE_DIRS +=  -I../../components/LEDManager/
 INCLUDE_DIRS += -I../../system/
 INCLUDE_DIRS += -I../../kernel/
 
-DEPENDENCIES = ../../components/LEDManager/fakeLED.o
+DEPENDENCIES = ../../components/LEDManager/LEDManager.o
 
 KERNEL_OBJS = ${RF_KERNEL_DIR}/RF_queue.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_events.o
@@ -28,13 +28,13 @@ KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_agents.o
 
 
 
-ARM_main: ${DEPENDENCIES}
+build_target: ${DEPENDENCIES} ${KERNEL_OBJS}
 	${CC_TARGET} ${CC_CONFIG} ${CPU_CONFIG} -Os \
 	${CFLAGS} ${INCLUDE_DIRS} ${LFLAGS} ${CMSIS_STARTUP_INC_PATH}/startup_stm32f407xx.s \
-	${DEPENDENCIES} ARM_main_stm32.c ${CMSIS_SYSTEM_CONFIG_INC_PATH}/system_stm32f4xx.c -o ARM_main_stm32.axf;
+	${DEPENDENCIES} ${KERNEL_OBJS} ARM_main_stm32.c ${CMSIS_SYSTEM_CONFIG_INC_PATH}/system_stm32f4xx.c -o ARM_main_stm32.axf;
 	arm-none-eabi-objcopy -O binary ARM_main_stm32.axf ARM_main_stm32.bin
 	
-build_synthetic: ../../components/LEDManager/LEDManager.o ${KERNEL_OBJS} 
+build_synthetic: ${DEPENDENCIES} ${KERNEL_OBJS} 
 	${CC_SYNTHETIC} -g -Wall ${CFLAGS} ${INCLUDE_DIRS} ../../components/LEDManager/LEDManager.o \
 	${KERNEL_OBJS} ARM_main_synth.c -o ARM_main_synth
 	

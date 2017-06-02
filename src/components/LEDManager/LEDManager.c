@@ -1,7 +1,6 @@
 #include <LEDManager.h>
 //#include <RF_timers.h>
 #include <assert.h>
-#include <stdio.h>
 
 typedef struct
 {
@@ -51,7 +50,7 @@ RFHandle LEDOffState(LEDManagerAgent* const me, RFEvent *const evt)
 		}
 		default:
 		{
-			printf("LEDManager received default sig\n");
+			//printf("LEDManager received default sig\n");
 			return RF_HANDLED;
 		}
 	}
@@ -59,7 +58,7 @@ RFHandle LEDOffState(LEDManagerAgent* const me, RFEvent *const evt)
 
 void switchLEDOff(void)
 {
-	printf("LED switched off...\n");
+	//printf("LED switched off...\n");
 }
 
 /*void switchLEDOn(void)

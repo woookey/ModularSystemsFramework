@@ -16,8 +16,8 @@ int main()
 	RF_Dispatcher_RegisterNumberOfAgents(1);
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
 
-	printf("Agent started\n");
+	printf("System started\n");
 	runScheduler();
-	printf("After scheduler ran\n");
+	printf("System scheduler ran\n");
 	return 0;
 }
