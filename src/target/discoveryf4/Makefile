@@ -17,8 +17,10 @@ INCLUDE_DIRS = -I./
 INCLUDE_DIRS +=  -I../../components/LEDManager/
 INCLUDE_DIRS += -I../../system/
 INCLUDE_DIRS += -I../../kernel/
+INCLUDE_DIRS += -I../../porting/
 
-DEPENDENCIES = ../../components/LEDManager/LEDManager.o
+DEPENDENCIES = ../../porting/porting.o
+DEPENDENCIES += ../../components/LEDManager/LEDManager.o
 
 KERNEL_OBJS = ${RF_KERNEL_DIR}/RF_queue.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_events.o
@@ -35,8 +37,8 @@ build_target: ${DEPENDENCIES} ${KERNEL_OBJS}
 	arm-none-eabi-objcopy -O binary ARM_main_stm32.axf ARM_main_stm32.bin
 	
 build_synthetic: ${DEPENDENCIES} ${KERNEL_OBJS} 
-	${CC_SYNTHETIC} -g -Wall ${CFLAGS} ${INCLUDE_DIRS} ../../components/LEDManager/LEDManager.o \
-	${KERNEL_OBJS} ARM_main_synth.c -o ARM_main_synth
+	${CC_SYNTHETIC} -g -Wall ${CFLAGS} ${INCLUDE_DIRS} \
+	${DEPENDENCIES} ${KERNEL_OBJS} ARM_main_synth.c -o ARM_main_synth
 	
 clean:
 	rm -rf *~ *.axf *.bin ARM_main_synth \
