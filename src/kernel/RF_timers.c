@@ -48,6 +48,10 @@ void RFTimer_disarmTimer(RF_Timer *timer)
 
 void RFTimer_decreaseTimersByOneTick(void)
 {
+	/**
+	 * Updating timer has to be an atomic action
+	 */
+	RF_enterCriticalSection();
 	uint16_t timer_i = 0;
 	while(timer_i < RFRegisteredTimers.noOfRegisteredTimers)
 	{
@@ -63,6 +67,7 @@ void RFTimer_decreaseTimersByOneTick(void)
 		}
 		timer_i++;
 	}
+	RF_exitCriticalSection();
 }
 
 bool add_timer(RF_Timer* timerPtr)

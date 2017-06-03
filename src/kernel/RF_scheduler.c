@@ -1,5 +1,6 @@
 #include <RF_scheduler.h>
 #include <RF_queue.h>
+#include <RF_porting.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <RF_definitions.h>
@@ -47,13 +48,18 @@ void runScheduler(void)
 	for(agentNumber = 0; agentNumber < RFSchedulerObject.numberOfAgents; agentNumber++)
 	{
 		RFAgent* currentAgent = RFSchedulerObject.agentsList[agentNumber];
-		if (areThereAnyEventsToBeConsumedForAgent(currentAgent))
+		while (areThereAnyEventsToBeConsumedForAgent(currentAgent))
 		{
 			RFHandle returnHandle;
 			returnHandle = currentAgent->currentHandler
 			(currentAgent,(RFEvent *const)currentAgent->FIFOQueue.pop(&currentAgent->FIFOQueue));
 			assert(returnHandle == RF_HANDLED || returnHandle == RF_UNHANDLED);
+			/**
+			 * removing garbage has to be an atomic action
+			 */
+			RF_enterCriticalSection();
 			currentAgent->FIFOQueue.removeGarbage(&currentAgent->FIFOQueue);
+			RF_exitCriticalSection();
 		}
 	}
 	}

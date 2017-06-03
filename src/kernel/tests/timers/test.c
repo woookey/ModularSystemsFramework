@@ -51,6 +51,9 @@ static void run_twoSampleTimersShouldGenerateTimeoutAfterSameTimeout(void);
 static void run_firstSampleTimerIsDisarmedBeforeTimingOutAndSecondShouldTimeoutOnly(void);
 static void run_twoTimersRegisteredForDifferentAgentsGenerateTimeout(void);
 
+void RF_enterCriticalSection() {}
+void RF_exitCriticalSection() {}
+
 int main()
 {
 	UNITY_BEGIN();

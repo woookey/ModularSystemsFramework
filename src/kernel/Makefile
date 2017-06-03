@@ -7,22 +7,13 @@ CC_TARGET = arm-none-eabi-gcc
 
 RF_kernel: ${RF_OBJS}
 
-main: ${OBJS} ${RF_OBJS}
-	${CC} ${LFLAGS} ${OBJS} ${RF_OBJS} -o main
-
-main.o: main.c RF_scheduler.o RF_agents.o RF_events.o RF_queue.o LEDManagerTest.o RF_dispatcher.o
-	${CC} ${CFLAGS} main.c
-	
-LEDManagerTest.o: LEDManagerTest.c LEDManagerTest.h RF_events.o RF_agents.o RF_queue.o
-	${CC} ${CFLAGS} LEDManagerTest.c
-
-RF_scheduler.o: RF_agents.o RF_scheduler.h RF_scheduler.c RF_events.o RF_queue.o
+RF_scheduler.o: RF_agents.o RF_scheduler.h RF_scheduler.c RF_events.o RF_queue.o RF_porting.h
 	${CC} ${CFLAGS} RF_scheduler.c
 	
-RF_dispatcher.o: RF_agents.o RF_queue.o RF_events.o RF_dispatcher.h RF_dispatcher.c RF_definitions.h
+RF_dispatcher.o: RF_agents.o RF_queue.o RF_events.o RF_dispatcher.h RF_dispatcher.c RF_definitions.h RF_porting.h
 	${CC} ${CFLAGS} RF_dispatcher.c
 
-RF_timers.o: RF_timers.c RF_timers.h RF_agents.o RF_events.o
+RF_timers.o: RF_timers.c RF_timers.h RF_agents.o RF_events.o RF_porting.h
 	${CC} ${CFLAGS} RF_timers.c
 
 RF_agents.o: RF_agents.c RF_agents.h RF_events.o RF_queue.o

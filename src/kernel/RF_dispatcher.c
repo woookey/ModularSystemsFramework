@@ -1,6 +1,7 @@
 #include <RF_dispatcher.h>
 #include <RF_definitions.h>
 #include <RF_queue.h>
+#include <RF_porting.h>
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
@@ -88,6 +89,10 @@ void publishEvent(RFEvent const* const evt)
 {
 	assert(evt != NULL);
 	uint16_t agentSlot;
+	/**
+	 * Publishing an event has to be an atomic action
+	 */
+	RF_enterCriticalSection();
 	for (agentSlot = 0; agentSlot < dispatcherInstance.noOfRegisteredAgents; agentSlot++)
 	{
 		if (subscribersInstance[evt->signalValue][agentSlot] != NULL)
@@ -96,4 +101,5 @@ void publishEvent(RFEvent const* const evt)
 			subscribedAgent->FIFOQueue.push(&subscribedAgent->FIFOQueue, (RFEvent*)evt, evt->eventSize);
 		}
 	}
+	RF_exitCriticalSection();
 }

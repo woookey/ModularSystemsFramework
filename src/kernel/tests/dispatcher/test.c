@@ -41,6 +41,9 @@ static void clearVariables(void);
 static void consumeEventsBySampleAgent(void);
 static void consumeEventsBySampleAgentTwo(void);
 
+void RF_enterCriticalSection() {}
+void RF_exitCriticalSection() {}
+
 int main() {
 	UNITY_BEGIN();
 	RUN_TEST(run_SampleAgentIsSubscribedToSampleEventAndSampleEventIsPublished);
