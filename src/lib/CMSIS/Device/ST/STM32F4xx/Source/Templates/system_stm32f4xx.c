@@ -67,7 +67,7 @@
 #include "stm32f4xx.h"
 
 #if !defined  (HSE_VALUE) 
-  #define HSE_VALUE    ((uint32_t)25000000) /*!< Default value of the External oscillator in Hz */
+  #define HSE_VALUE    ((uint32_t)8000000) /*!< Default value of the External oscillator in Hz */
 #endif /* HSE_VALUE */
 
 #if !defined  (HSI_VALUE)
@@ -240,7 +240,7 @@ void SystemInit(void)
   */
 void SystemCoreClockUpdate(void)
 {
-  uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
+  uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 8;
   
   /* Get SYSCLK source -------------------------------------------------------*/
   tmp = RCC->CFGR & RCC_CFGR_SWS;

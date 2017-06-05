@@ -4,12 +4,28 @@
 #include <RF_scheduler.h>
 #include <RF_dispatcher.h>
 #include <systemSignals.h>
+#include <stdint.h>
 
+#define PIN7 7
+#define LED_ORANGE 13
+
+static void dumbDelay(uint32_t tickCounts);
 static void setupHardware(void);
+static void switchOrangeOn(void);
+static void switchOrangeOff(void);
 
 int main()
 {
 	setupHardware();
+	while (1)
+	{
+		switchOrangeOn();
+		dumbDelay(16800000);
+		switchOrangeOff();
+		dumbDelay(16800000);
+	}
+
+
 	RFEvent LEDManagerPool[10];
 	RF_DispatcherCtor();
 	startAgent(LEDManager, &LEDManagerConstructor, AGENT_PRIORITY_0,
@@ -24,8 +40,7 @@ int main()
 
 void setupHardware(void)
 {
-	#define PIN7 7
-	#define LED_ORANGE 13
+	SystemCoreClockUpdate();
 
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
@@ -36,5 +51,12 @@ void setupHardware(void)
 
 	GPIOD->MODER |= (1 << (LED_ORANGE << 1));
 	GPIOD->OSPEEDR |= (3 << (LED_ORANGE << 1));
-	GPIOD->BSRR |= (1 << LED_ORANGE);
 }
+
+static void dumbDelay(uint32_t tickCounts)
+{
+	while(tickCounts--) {}
+}
+
+static void switchOrangeOn(void) {GPIOD->BSRR |= (1 << LED_ORANGE);}
+static void switchOrangeOff(void) {GPIOD->BSRR &= (0 << LED_ORANGE);}
