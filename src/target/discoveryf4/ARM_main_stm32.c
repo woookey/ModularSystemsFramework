@@ -5,6 +5,10 @@
 #include <RF_dispatcher.h>
 #include <systemSignals.h>
 #include <stdint.h>
+#include <stm32f4xx_hal_conf.h>
+#include <stm32f4xx_hal_rcc.h>
+#include <stm32f4xx_hal_rcc_ex.h>
+#include <assert.h>
 
 #define PIN7 7
 #define LED_ORANGE 13
@@ -13,6 +17,7 @@ static void dumbDelay(uint32_t tickCounts);
 static void setupHardware(void);
 static void switchOrangeOn(void);
 static void switchOrangeOff(void);
+static void initClocks(void);
 
 int main()
 {
@@ -40,6 +45,8 @@ int main()
 
 void setupHardware(void)
 {
+	initClocks();
+
 	SystemCoreClockUpdate();
 
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
@@ -60,3 +67,46 @@ static void dumbDelay(uint32_t tickCounts)
 
 static void switchOrangeOn(void) {GPIOD->BSRR |= (1 << LED_ORANGE);}
 static void switchOrangeOff(void) {GPIOD->BSRR &= (0 << LED_ORANGE);}
+
+
+static void initClocks()
+{
+    HAL_RCC_DeInit();
+    RCC_OscInitTypeDef rccOscInstance =
+    {
+    		.OscillatorType = RCC_OSCILLATORTYPE_HSE,
+			.HSEState = RCC_HSE_ON,
+			.LSEState = RCC_LSE_OFF,
+			.HSIState = RCC_HSI_OFF,
+			.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT,
+			.LSIState = RCC_LSI_OFF,
+			.PLL =
+			{
+					.PLLState = RCC_PLL_ON,
+					.PLLSource = RCC_PLLSOURCE_HSE,
+					.PLLM = 8,
+					.PLLN = 336,
+					.PLLP = RCC_PLLP_DIV2,
+					.PLLQ = 7,
+			},
+    };
+    assert(HAL_RCC_OscConfig(&rccOscInstance) == HAL_OK);
+
+    RCC_ClkInitTypeDef rccClkInstance =
+    {
+    		  .ClockType = RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK,
+    		  .SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK,
+    		  .AHBCLKDivider = RCC_SYSCLK_DIV1,
+    		  .APB1CLKDivider = RCC_HCLK_DIV4,
+    		  .APB2CLKDivider = RCC_HCLK_DIV2,
+    };
+
+    assert(HAL_RCC_ClockConfig(&rccClkInstance, FLASH_ACR_LATENCY_5WS) == HAL_OK);
+}
+
+/*static void HA_Clocks_InitSYSCLK()
+{
+    RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
+    Q_REQUIRE(SUCCESS == RCC_WaitForClockSourceSwitch(RCC_CFGR_SWS_PLL));
+    SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);
+}*/
