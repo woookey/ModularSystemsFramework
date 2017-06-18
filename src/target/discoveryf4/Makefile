@@ -37,7 +37,6 @@ KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_dispatcher.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_agents.o
 
 
-
 build_target: ${DEPENDENCIES} ${KERNEL_OBJS} 
 	${CC_TARGET} ${CC_CONFIG} ${CPU_CONFIG} -Os \
 	${CFLAGS} ${INCLUDE_DIRS} ${LFLAGS} ${CMSIS_STARTUP_INC_PATH}/startup_stm32f407xx.s \
@@ -49,8 +48,20 @@ build_synthetic: ${DEPENDENCIES} ${KERNEL_OBJS}
 	${CC_SYNTHETIC} -g -Wall ${CFLAGS} ${INCLUDE_DIRS} \
 	${DEPENDENCIES} ${KERNEL_OBJS} ARM_main_synth.c -o ARM_main_synth
 	
+sample: sample_1 system startup 
+	arm-none-eabi-gcc --specs=nosys.specs -mcpu=cortex-m4 -mthumb -T ../../lib/STM32F407_Linker/STM32F407VGTx_FLASH.ld -L../../lib/STM32F407_Linker/STM32F407VGTx_FLASH.ld system.o startup.o sample_target.o -o sample.axf;
+	arm-none-eabi-objcopy -O binary sample.axf sample.bin
+	
+sample_1:
+	arm-none-eabi-gcc --specs=nosys.specs -Wall -mcpu=cortex-m4 -mthumb -I../../lib/CMSIS/Include/ -I ../../lib/CMSIS/Device/ST/STM32F4xx/Include/ -DSTM32F407xx -Os -c sample_target.c -o sample_target.o
+	
+system:
+	arm-none-eabi-gcc --specs=nosys.specs -Wall -mcpu=cortex-m4 -mthumb -I../../lib/CMSIS/Include/ -I ../../lib/CMSIS/Device/ST/STM32F4xx/Include/ -DSTM32F407xx -Os -c ../../lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c -o system.o
+
+startup:
+	arm-none-eabi-gcc --specs=nosys.specs -Wall -mcpu=cortex-m4 -mthumb -I../../lib/CMSIS/Include/ -I ../../lib/CMSIS/Device/ST/STM32F4xx/Include/ -DSTM32F407xx -Os -c ../../lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f407xx.s -o startup.o
+	
 clean:
-	rm -rf *~ *.axf *.bin ARM_main_synth \
-	ARM_main_stm32.axf ARM_main_stm32.bin
+	rm -rf *~ *.axf *.bin ARM_main_synth *o
 	
 	
