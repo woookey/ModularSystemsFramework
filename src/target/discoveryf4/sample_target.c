@@ -1,5 +1,9 @@
 #include <stm32f4xx.h>
 #include <stdint.h>
+#include <RF_scheduler.h>
+#include <RF_dispatcher.h>
+#include <LEDManager.h>
+#include <systemSignals.h>
 
 #define ORANGE_LED_SET 13
 #define ORANGE_LED_RESET 29
@@ -19,10 +23,21 @@ int main()
 	while(1)
 	{
 		LED_ON();
-		delay(8000000);
+		delay(4000000);
 		LED_OFF();
-		delay(8000000);
+		delay(4000000);
 	}
+
+	RFEvent LEDManagerPool[10];
+	RF_DispatcherCtor();
+	startAgent(LEDManager, &LEDManagerConstructor, AGENT_PRIORITY_0,
+				&LEDManagerPool[0], sizeof(RFEvent)*10);
+
+	RF_Dispatcher_RegisterNumberOfAgents(1);
+	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
+
+	runScheduler();
+
 	return 0;
 }
 

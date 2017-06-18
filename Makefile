@@ -23,6 +23,15 @@ build_target:
 	mkdir -p bld/target
 	cp ${TARGET_BUILD}/ARM_main_stm32.axf ${CUR_DIR}/bld/target
 	cp ${TARGET_BUILD}/ARM_main_stm32.bin ${CUR_DIR}/bld/target
+	
+build_sample_target:
+	make clean
+	cd ${KERNEL_DIR}; make RF_kernel CC=arm-none-eabi-gcc
+	cd ${PORTING_DIR}; make build_porting CC=arm-none-eabi-gcc
+	cd ${COMPONENTS_DIR}; make build_components CC=arm-none-eabi-gcc
+	cd ${TARGET_BUILD}; make sample
+	mkdir -p bld/target
+	cp ${TARGET_BUILD}/sample.bin ${CUR_DIR}/bld/target
 
 build_synthetic_kernel:
 	make clean
