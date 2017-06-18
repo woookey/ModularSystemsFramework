@@ -10,22 +10,26 @@
 #define LED_ON() GPIOD->BSRR |= (1 << ORANGE_LED_SET)
 #define LED_OFF() GPIOD->BSRR |= (1 << ORANGE_LED_RESET)
 
-static void delay(int n);
+static volatile uint32_t delayInMs = 0;
+
+static void delayWithInterrupt(uint32_t delayInMilliseconds);
 static void initHardware(void);
 static void initClocks(void);
+static void setSysTick(void);
 
 int main()
 {
 	initClocks();
 	initHardware();
 	SystemCoreClockUpdate();
+	setSysTick();
 
 	while(1)
 	{
 		LED_ON();
-		delay(4000000);
+		delayWithInterrupt(1000);
 		LED_OFF();
-		delay(4000000);
+		delayWithInterrupt(1000);
 	}
 
 	RFEvent LEDManagerPool[10];
@@ -41,20 +45,33 @@ int main()
 	return 0;
 }
 
-void delay(int n)
+void delayWithInterrupt(uint32_t delayInMilliseconds)
 {
-	volatile int i = 0;
-	while (i < n) {i++;}
+	delayInMs = delayInMilliseconds;
+	while(delayInMs != 0);
 }
 
 void initHardware(void)
 {
 	/* Enable GPIOA clock */
-		RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
-		/* Configure GPIOA pin 5 as output */
-		GPIOD->MODER |= (1 << (ORANGE_LED_SET << 1));
-		/* Configure GPIOA pin 5 in max speed */
-		GPIOD->OSPEEDR |= (3 << (ORANGE_LED_SET << 1));
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
+	/* Configure GPIOA pin 5 as output */
+	GPIOD->MODER |= (1 << (ORANGE_LED_SET << 1));
+	/* Configure GPIOA pin 5 in max speed */
+	GPIOD->OSPEEDR |= (3 << (ORANGE_LED_SET << 1));
 }
 
 void initClocks(void) {}
+
+void setSysTick(void)
+{
+	SysTick_Config(SystemCoreClock/1000);
+}
+
+void SysTick_Handler(void)
+{
+	if (delayInMs != 0)
+	{
+		delayInMs--;
+	}
+}
