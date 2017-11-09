@@ -7,7 +7,7 @@ PORTING_DIR = ${CUR_DIR}/src/porting
 
 build_synthetic:
 	make clean
-	cd ${KERNEL_DIR}; make RF_kernel
+	cd ${KERNEL_DIR}; make RF_kernel CC=gcc
 	cd ${PORTING_DIR}; make build_porting CC=gcc
 	cd ${COMPONENTS_DIR}; make build_components CC=gcc
 	cd ${TARGET_BUILD}; make build_synthetic
@@ -40,6 +40,11 @@ build_synthetic_kernel:
 test_kernel:
 	make clean
 	cd ${KERNEL_DIR}; make test
+	
+test_components:
+	make clean
+	cd ${KERNEL_DIR}; make RF_kernel CC=gcc # TODO: The whole kernel is not needed to be compiled
+	cd ${COMPONENTS_DIR}; make test_components
 	
 clean:
 	rm -rf bld

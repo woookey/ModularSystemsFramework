@@ -34,6 +34,10 @@ static void setupHardware(void);
 //static void switchOrangeOff(void);
 static void initClocks(void);
 
+/**
+ * TODO: TOP PRIORITY - RUN program on target and get it to flash the damn LED!!!!
+ */
+
 int main()
 {
 	SystemInit();

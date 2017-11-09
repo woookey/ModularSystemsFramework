@@ -18,6 +18,6 @@ int main()
 
 	printf("System started\n");
 	runScheduler();
-	printf("System scheduler ran\n");
+	printf("System scheduler finished\n");
 	return 0;
 }
