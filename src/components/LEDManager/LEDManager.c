@@ -13,7 +13,7 @@ static LEDManagerAgent LEDManagerInstance;
 RFAgent * const LEDManager = (RFAgent* const)&LEDManagerInstance.baseAgent;
 
 static RFHandle initialState(LEDManagerAgent* const me, RFEvent *const evt);
-static RFHandle LEDOffState(LEDManagerAgent* const me, RFEvent *const evt);
+static RFHandle LEDOnState(LEDManagerAgent* const me, RFEvent *const evt);
 
 void LEDManagerConstructor(RFAgent * const self)
 {
@@ -26,21 +26,21 @@ RFHandle initialState(LEDManagerAgent* const me, RFEvent *const evt)
 {
 	(void)evt;
 	(void)me;
-	INITIAL_TRANSITION(me, &LEDOffState);
+	INITIAL_TRANSITION(me, &LEDOnState);
 }
 
-RFHandle LEDOffState(LEDManagerAgent* const me, RFEvent *const evt)
+RFHandle LEDOnState(LEDManagerAgent* const me, RFEvent *const evt)
 {
 	switch (evt->signalValue)
 	{
 		case RF_INITIAL_SIGNAL:
 		{
-			CP_HD_LED_switchLEDOff();
+			CP_HD_LED_switchLEDOn();
 			return RF_HANDLED;
 		}
 		case RF_ENTRY_SIGNAL:
 		{
-			CP_HD_LED_switchLEDOff();
+			CP_HD_LED_switchLEDOn();
 			return RF_HANDLED;
 		}
 	}
