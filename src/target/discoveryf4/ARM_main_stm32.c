@@ -92,6 +92,7 @@ void setupHardware(void)
 
 static void initClocks()
 {
+	// TODO: Verify the speed of clock
     HAL_RCC_DeInit();
     RCC_OscInitTypeDef rccOscInstance =
     {
