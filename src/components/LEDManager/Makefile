@@ -13,3 +13,4 @@ LEDManager.o: LEDManager.c LEDManager.h ${KERNEL_DIR}/RF_agents.o ${KERNEL_DIR}/
 
 clean:
 	rm -rf *.o *~
+	cd ${CUR_DIR}/tests; make clean
