@@ -72,7 +72,7 @@ int main()
 
 void setupHardware(void)
 {
-	//initClocks();
+	initClocks();
 	//HAL_Init();
 	//SystemCoreClockUpdate();
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
