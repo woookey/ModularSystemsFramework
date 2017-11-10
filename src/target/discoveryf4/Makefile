@@ -19,6 +19,7 @@ DEFS = -DHSE_VALUE=8000000 -DSTM32F407xx
 
 INCLUDE_DIRS = -I./
 INCLUDE_DIRS +=  -I../../components/LEDManager/
+INCLUDE_DIRS += -I../../components/CP_HD_LEDDriver/
 INCLUDE_DIRS += -I../../system/
 INCLUDE_DIRS += -I../../kernel/
 INCLUDE_DIRS += -I../../porting/
@@ -30,6 +31,7 @@ HAL_SRC += ${STM32_HAL_DRIVER_SRC_PATH}/stm32f4xx_hal_cortex.c
 
 DEPENDENCIES = ../../porting/porting.o
 DEPENDENCIES += ../../components/LEDManager/LEDManager.o
+DEPENDENCIES += ../../components/CP_HD_LEDDriver/CP_HD_LEDDriver.o
 
 KERNEL_OBJS = ${RF_KERNEL_DIR}/RF_queue.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_events.o

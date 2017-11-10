@@ -37,21 +37,7 @@ int main()
 {
 	SystemInit();
 	SystemCoreClockUpdate();
-	//setupHardware();
-	//RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
-
-	GPIOD->MODER |= (1 << (LED_ORANGE << 1));
-	GPIOD->OSPEEDR |= (3 << (LED_ORANGE << 1));
-
-	GPIOD->MODER |= (1 << (LED_GREEN << 1));
-	GPIOD->OSPEEDR |= (3 << (LED_GREEN << 1));
-
-	GPIOD->MODER |= (1 << (LED_RED << 1));
-	GPIOD->OSPEEDR |= (3 << (LED_RED << 1));
-
-	GPIOD->MODER |= (1 << (LED_BLUE << 1));
-	GPIOD->OSPEEDR |= (3 << (LED_BLUE << 1));
+	setupHardware();
 
 	while(1)
 	{
@@ -75,7 +61,7 @@ int main()
 	RFEvent LEDManagerPool[10];
 	RF_DispatcherCtor();
 	startAgent(LEDManager, &LEDManagerConstructor, AGENT_PRIORITY_0,
-				&LEDManagerPool[0], sizeof(RFEvent)*10);
+						&LEDManagerPool[0], sizeof(RFEvent)*10);
 
 	RF_Dispatcher_RegisterNumberOfAgents(1);
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
@@ -87,9 +73,8 @@ int main()
 void setupHardware(void)
 {
 	//initClocks();
-	HAL_Init();
+	//HAL_Init();
 	//SystemCoreClockUpdate();
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
 
 	GPIOD->MODER |= (1 << (LED_ORANGE << 1));
@@ -103,12 +88,7 @@ void setupHardware(void)
 
 	GPIOD->MODER |= (1 << (LED_BLUE << 1));
 	GPIOD->OSPEEDR |= (3 << (LED_BLUE << 1));
-
 }
-
-//static void switchOrangeOn(void) {GPIOD->BSRR |= (1 << LED_ORANGE);}
-//static void switchOrangeOff(void) {GPIOD->BSRR |= (1 << LED_ORANGE_OFF);}
-
 
 static void initClocks()
 {
