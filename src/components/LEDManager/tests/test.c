@@ -1,4 +1,7 @@
 #include <LEDManager.h>
+#include <RF_scheduler.h>
+#include <RF_dispatcher.h>
+#include <systemSignals.h>
 #include <unity.h>
 
 static void createLEDManagerSucceeds(void);
@@ -14,7 +17,7 @@ void createLEDManagerSucceeds(void)
 {
 	(void)LEDManager;
 	// TODO: Continue testing LEDManager
-	/**
+
 	RFEvent LEDManagerPool[10];
 	RF_DispatcherCtor();
 	startAgent(LEDManager, &LEDManagerConstructor, AGENT_PRIORITY_0,
@@ -22,7 +25,7 @@ void createLEDManagerSucceeds(void)
 
 	RF_Dispatcher_RegisterNumberOfAgents(1);
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
-
-	runScheduler();
-	*/
+	TEST_ASSERT(LEDManager->currentHandler != NULL);
+	//runScheduler();
+	// LED hardware has to be added before moving on - at least mocks
 }

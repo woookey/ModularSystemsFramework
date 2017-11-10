@@ -1,6 +1,13 @@
 CUR_DIR = $(shell pwd)
 
 build_components:
+	make build_components_CP_HD_LEDDriver
+	make build_components_LEDManager
+	
+build_components_CP_HD_LEDDriver:
+	cd ${CUR_DIR}/CP_HD_LEDDriver; make CP_HD_LEDDriver.o CC=${CC}
+	
+build_components_LEDManager:
 	cd ${CUR_DIR}/LEDManager; make LEDManager.o CC=${CC}
 	
 test_components:
@@ -11,3 +18,4 @@ test_components_LEDManager:
 
 clean:
 	cd $(CUR_DIR)/LEDManager; make clean
+	cd ${CUR_DIR}/CP_HD_LEDDriver; make clean

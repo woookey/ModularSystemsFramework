@@ -1,4 +1,5 @@
 #include <LEDManager.h>
+#include <CP_HD_LEDDriver.h>
 //#include <RF_timers.h>
 #include <assert.h>
 
@@ -13,12 +14,6 @@ RFAgent * const LEDManager = (RFAgent* const)&LEDManagerInstance.baseAgent;
 
 static RFHandle initialState(LEDManagerAgent* const me, RFEvent *const evt);
 static RFHandle LEDOffState(LEDManagerAgent* const me, RFEvent *const evt);
-
-/**
- * Functions calling hardware - to be removed
- */
-static void switchLEDOff(void);
-//static void switchLEDOn(void);
 
 void LEDManagerConstructor(RFAgent * const self)
 {
@@ -40,28 +35,15 @@ RFHandle LEDOffState(LEDManagerAgent* const me, RFEvent *const evt)
 	{
 		case RF_INITIAL_SIGNAL:
 		{
-			switchLEDOff();
+			CP_HD_LED_switchLEDOff();
 			return RF_HANDLED;
 		}
 		case RF_ENTRY_SIGNAL:
 		{
-			switchLEDOff();
-			return RF_HANDLED;
-		}
-		default:
-		{
-			//printf("LEDManager received default sig\n");
+			CP_HD_LED_switchLEDOff();
 			return RF_HANDLED;
 		}
 	}
+	return RF_UNHANDLED;
 }
 
-void switchLEDOff(void)
-{
-	//printf("LED switched off...\n");
-}
-
-/*void switchLEDOn(void)
-{
-	printf("LED switched on...\n");
-}*/
