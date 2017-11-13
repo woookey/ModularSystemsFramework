@@ -8,7 +8,7 @@ CP_HD_LED_DIR = ${CUR_DIR}/../../CP_HD_LEDDriver
 
 KERNEL_OBJS = ${KERNEL_DIR}/RF_scheduler.o ${KERNEL_DIR}/RF_dispatcher.o
 KERNEL_OBJS += ${KERNEL_DIR}/RF_queue.o ${KERNEL_DIR}/RF_events.o 
-KERNEL_OBJS += ${KERNEL_DIR}/RF_agents.o
+KERNEL_OBJS += ${KERNEL_DIR}/RF_agents.o ${KERNEL_DIR}/RF_timers.o
 
 OBJS = test.c 
 OBJS += ${UNITY_DIR}/unity.c 

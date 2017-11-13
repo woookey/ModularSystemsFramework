@@ -1,4 +1,4 @@
-RF_OBJS = RF_agents.o RF_scheduler.o RF_events.o RF_queue.o RF_dispatcher.o
+RF_OBJS = RF_agents.o RF_scheduler.o RF_events.o RF_queue.o RF_dispatcher.o RF_timers.o
 CFLAGS = -Wall -g -I. -c
 LFLAGS = -Wall -I.
 
