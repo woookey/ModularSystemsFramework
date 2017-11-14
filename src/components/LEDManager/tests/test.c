@@ -5,6 +5,7 @@
 #include <unity.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 typedef struct
 {
@@ -34,6 +35,16 @@ void CP_HD_LED_switchLEDOn()
 	LEDInstance.timesSwitchedOn++;
 }
 
+void accelerateTimeByNTicks(uint32_t nTicks)
+{
+	uint32_t i;
+	for (i = 0; i < nTicks; i++)
+	{
+		RFTimer_decreaseTimersByOneTick();
+		runScheduler();
+	}
+}
+
 static void createLEDManagerSucceeds(void);
 
 int main()
@@ -57,4 +68,12 @@ void createLEDManagerSucceeds(void)
 	runScheduler();
 	TEST_ASSERT(LEDInstance.isOn);
 	TEST_ASSERT(LEDInstance.timesSwitchedOn == (uint32_t)1);
+	accelerateTimeByNTicks(500);
+	TEST_ASSERT(!LEDInstance.isOn)
+	TEST_ASSERT(LEDInstance.timesSwitchedOn == (uint32_t)1);
+	TEST_ASSERT(LEDInstance.timesSwitchedOff == (uint32_t)1);
+	accelerateTimeByNTicks(500);
+	TEST_ASSERT(LEDInstance.isOn);
+	TEST_ASSERT(LEDInstance.timesSwitchedOn == (uint32_t)2);
+	TEST_ASSERT(LEDInstance.timesSwitchedOff == (uint32_t)1);
 }
