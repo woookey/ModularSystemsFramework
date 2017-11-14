@@ -1,4 +1,4 @@
-#include <stm32f4xx.h>
+//#include <stm32f4xx.h>
 #include <LEDManager.h>
 #include <RF_events.h>
 #include <RF_scheduler.h>
