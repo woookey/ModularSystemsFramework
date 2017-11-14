@@ -38,6 +38,7 @@ KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_events.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_scheduler.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_dispatcher.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_agents.o
+KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_timers.o
 
 
 build_target: ${DEPENDENCIES} ${KERNEL_OBJS} 
