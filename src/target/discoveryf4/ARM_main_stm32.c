@@ -76,6 +76,7 @@ void setupHardware(void)
 	//HAL_Init();
 	//SystemCoreClockUpdate();
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
 
 	GPIOD->MODER |= (1 << (LED_ORANGE << 1));
 	GPIOD->OSPEEDR |= (3 << (LED_ORANGE << 1));
