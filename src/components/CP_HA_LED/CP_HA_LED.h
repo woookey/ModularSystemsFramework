@@ -1,6 +1,8 @@
 #ifndef CP_HA_LED_H
 #define CP_HA_LED_H
 
+#include <LEDType.h>
+
 typedef struct LEDType LEDType_t;
 typedef LEDType_t *const CP_HA_LEDStruct;
 
