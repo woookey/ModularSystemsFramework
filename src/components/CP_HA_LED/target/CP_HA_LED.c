@@ -1,12 +1,9 @@
 #include <CP_HA_LED.h>
 #include <LEDType.h>
 
-typedef GPIO_TypeDef* GPIO_TypeDefRef;
-
-GPIO_TypeDefRef CPUActivityLEDInstance_GPIODef = GPIOD;
 struct LEDType CPUActivityLEDInstance =
 {
-		.GPIOTypeDef_t = CPUActivityLEDInstance_GPIODef,
+		.GPIOTypeDef_t = {GPIOD},
 		.GPIOInitTypeDef_t =
 		{
 				.Pin = GPIO_PIN_12,
@@ -16,10 +13,9 @@ struct LEDType CPUActivityLEDInstance =
 		},
 };
 
-GPIO_TypeDefRef powerOnIndicationLEDInstance_GPIODef = GPIOC;
 struct LEDType powerOnIndicationLEDInstance =
 {
-		.GPIOTypeDef_t = powerOnIndicationLEDInstance_GPIODef,
+		.GPIOTypeDef_t = {GPIOC},
 		.GPIOInitTypeDef_t =
 		{
 				.Pin = GPIO_PIN_0,
@@ -29,10 +25,9 @@ struct LEDType powerOnIndicationLEDInstance =
 		},
 };
 
-GPIO_TypeDefRef executingIndicationLEDInstance_GPIODef = GPIOC;
 struct LEDType executingIndicationLEDInstance =
 {
-		.GPIOTypeDef_t = powerOnIndicationLEDInstance_GPIODef,
+		.GPIOTypeDef_t = {GPIOC},
 		.GPIOInitTypeDef_t =
 		{
 				.Pin = GPIO_PIN_1,
@@ -42,10 +37,9 @@ struct LEDType executingIndicationLEDInstance =
 		},
 };
 
-GPIO_TypeDefRef safetyStopIndicationLEDInstance_GPIODef = GPIOC;
 struct LEDType safetyStopIndicationLEDInstance =
 {
-		.GPIOTypeDef_t = safetyStopIndicationLEDInstance_GPIODef,
+		.GPIOTypeDef_t = {GPIOC},
 		.GPIOInitTypeDef_t =
 		{
 				.Pin = GPIO_PIN_2,
@@ -55,10 +49,10 @@ struct LEDType safetyStopIndicationLEDInstance =
 		},
 };
 
-CPUActivityLED = &CPUActivityLEDInstance;
-powerOnIndicationLED = &powerOnIndicationLEDInstance;
-executingIndicationLED = &executingIndicationLEDInstance;
-safetyStopIndicationLED = &safetyStopIndicationLEDInstance;
+CP_HA_LEDStruct CPUActivityLED = &CPUActivityLEDInstance;
+CP_HA_LEDStruct powerOnIndicationLED = &powerOnIndicationLEDInstance;
+CP_HA_LEDStruct executingIndicationLED = &executingIndicationLEDInstance;
+CP_HA_LEDStruct safetyStopIndicationLED = &safetyStopIndicationLEDInstance;
 
 void CP_HA_LEDConstruct(CP_HA_LEDStruct LEDInstance)
 {
