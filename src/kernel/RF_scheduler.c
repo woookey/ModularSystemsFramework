@@ -54,6 +54,7 @@ void runScheduler(void)
 			returnHandle = currentAgent->currentHandler
 			(currentAgent,(RFEvent *const)currentAgent->FIFOQueue.pop(&currentAgent->FIFOQueue));
 			assert(returnHandle == RF_HANDLED || returnHandle == RF_UNHANDLED);
+
 			/**
 			 * removing garbage has to be an atomic action
 			 */
