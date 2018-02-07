@@ -1,4 +1,4 @@
-#include <stm32f4xx.h>
+//#include <stm32f4xx.h>
 #include <LEDManager.h>
 #include <RF_events.h>
 #include <RF_scheduler.h>
@@ -18,6 +18,6 @@ int main()
 
 	printf("System started\n");
 	runScheduler();
-	printf("System scheduler ran\n");
+	printf("System scheduler finished\n");
 	return 0;
 }

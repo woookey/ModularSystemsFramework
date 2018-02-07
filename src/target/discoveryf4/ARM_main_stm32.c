@@ -25,70 +25,46 @@
 #define LED_BLUE 15
 #define LED_BLUE_OFF 31
 
-/*static void wait(uint32_t ticks)
+static void wait(uint32_t ticks)
 {
-	while(ticks--) {}
-}*/
+	volatile uint32_t time = ticks;
+	while(time--) {}
+}
 static void setupHardware(void);
-//static void switchOrangeOn(void);
-//static void switchOrangeOff(void);
 static void initClocks(void);
 
 int main()
 {
 	SystemInit();
-	 SystemCoreClockUpdate();
-	//setupHardware();
-	//RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
-
-	GPIOD->MODER |= (1 << (LED_ORANGE << 1));
-	GPIOD->OSPEEDR |= (3 << (LED_ORANGE << 1));
-
-	GPIOD->MODER |= (1 << (LED_GREEN << 1));
-	GPIOD->OSPEEDR |= (3 << (LED_GREEN << 1));
-	GPIOD->MODER |= (1 << (LED_RED << 1));
-		GPIOD->OSPEEDR |= (3 << (LED_RED << 1));
-
-		GPIOD->MODER |= (1 << (LED_BLUE << 1));
-		GPIOD->OSPEEDR |= (3 << (LED_BLUE << 1));
+	SystemCoreClockUpdate();
+	setupHardware();
 
 	while(1)
 	{
-		volatile int x = 0;
-		GPIOD->BSRR |= (1 << LED_RED);
-		GPIOD->BSRR |= (1 << LED_BLUE);
-		if (x == 100000)
-		{
-			GPIOD->BSRR |= (1 << LED_ORANGE);
-		}
-		else if (x == 1000000)
-		{
-			GPIOD->BSRR |= (1 << LED_GREEN);
-		}
-		x++;
-	}
-	/*while(1)
-	{
 		GPIOD->BSRR |= (1 << LED_ORANGE);
-		HAL_Delay(1000);
+		wait(1000000);
 		GPIOD->BSRR |= (1 << LED_GREEN);
-		HAL_Delay(1000);
+		wait(1000000);
 		GPIOD->BSRR |= (1 << LED_RED);
-		HAL_Delay(1000);
+		wait(1000000);
 		GPIOD->BSRR |= (1 << LED_BLUE);
-		HAL_Delay(1000);
-	}*/
-
-
+		wait(1000000);
+		GPIOD->BSRR |= (1 << LED_ORANGE_OFF);
+		wait(1000000);
+		GPIOD->BSRR |= (1 << LED_GREEN_OFF);
+		wait(1000000);
+		GPIOD->BSRR |= (1 << LED_RED_OFF);
+		wait(1000000);
+		GPIOD->BSRR |= (1 << LED_BLUE_OFF);
+		wait(1000000);
+	}
 	RFEvent LEDManagerPool[10];
 	RF_DispatcherCtor();
 	startAgent(LEDManager, &LEDManagerConstructor, AGENT_PRIORITY_0,
-			&LEDManagerPool[0], sizeof(RFEvent)*10);
+						&LEDManagerPool[0], sizeof(RFEvent)*10);
 
 	RF_Dispatcher_RegisterNumberOfAgents(1);
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
-
 	runScheduler();
 
 	return 0;
@@ -96,11 +72,11 @@ int main()
 
 void setupHardware(void)
 {
-	//initClocks();
-	HAL_Init();
+	initClocks();
+	//HAL_Init();
 	//SystemCoreClockUpdate();
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
 
 	GPIOD->MODER |= (1 << (LED_ORANGE << 1));
 	GPIOD->OSPEEDR |= (3 << (LED_ORANGE << 1));
@@ -113,15 +89,11 @@ void setupHardware(void)
 
 	GPIOD->MODER |= (1 << (LED_BLUE << 1));
 	GPIOD->OSPEEDR |= (3 << (LED_BLUE << 1));
-
 }
-
-//static void switchOrangeOn(void) {GPIOD->BSRR |= (1 << LED_ORANGE);}
-//static void switchOrangeOff(void) {GPIOD->BSRR |= (1 << LED_ORANGE_OFF);}
-
 
 static void initClocks()
 {
+	// TODO: Verify the speed of clock
     HAL_RCC_DeInit();
     RCC_OscInitTypeDef rccOscInstance =
     {

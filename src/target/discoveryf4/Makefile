@@ -18,7 +18,9 @@ LFLAGS = -T ${LINKER_SCRIPT} -L ${LINKER_PATH}
 DEFS = -DHSE_VALUE=8000000 -DSTM32F407xx
 
 INCLUDE_DIRS = -I./
-INCLUDE_DIRS +=  -I../../components/LEDManager/
+INCLUDE_DIRS += -I../../components/LEDManager/
+INCLUDE_DIRS += -I../../components/CP_HD_LEDDriver/
+INCLUDE_DIRS += -I../../components/CP_HA_LED/
 INCLUDE_DIRS += -I../../system/
 INCLUDE_DIRS += -I../../kernel/
 INCLUDE_DIRS += -I../../porting/
@@ -30,12 +32,15 @@ HAL_SRC += ${STM32_HAL_DRIVER_SRC_PATH}/stm32f4xx_hal_cortex.c
 
 DEPENDENCIES = ../../porting/porting.o
 DEPENDENCIES += ../../components/LEDManager/LEDManager.o
+DEPENDENCIES += ../../components/CP_HD_LEDDriver/CP_HD_LEDDriver.o
+DEPENDENCIES += ../../components/CP_HA_LED/CP_HA_LED.o
 
 KERNEL_OBJS = ${RF_KERNEL_DIR}/RF_queue.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_events.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_scheduler.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_dispatcher.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_agents.o
+KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_timers.o
 
 
 build_target: ${DEPENDENCIES} ${KERNEL_OBJS} 

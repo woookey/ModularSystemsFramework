@@ -17,7 +17,7 @@ void RFTimerConstructor(RFAgent* agentSubscribed, RF_Timer* timer, uint32_t sign
 {
 	assert(agentSubscribed != NULL);
 	assert(timer != NULL);
-	assert(signal > 0 && signal < RF_MAX_NUMBER_OF_SIGNALS);
+	assert(signal >= 0); // TODO: might need an upper band
 	memset(timer, 0, sizeof(RF_Timer));
 
 	timer->agent = agentSubscribed;

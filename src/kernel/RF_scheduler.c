@@ -41,8 +41,8 @@ void runScheduler(void)
 	 * At the moment each agent is equally important and
 	 * they are executed in the same order they were started
 	 */
-	while(1)
-	{
+	//while(1)
+	//{
 	assert(RFSchedulerObject.numberOfAgents > 0 && RFSchedulerObject.numberOfAgents <= RF_MAX_NUMBER_OF_AGENTS);
 	uint32_t agentNumber;
 	for(agentNumber = 0; agentNumber < RFSchedulerObject.numberOfAgents; agentNumber++)
@@ -54,6 +54,7 @@ void runScheduler(void)
 			returnHandle = currentAgent->currentHandler
 			(currentAgent,(RFEvent *const)currentAgent->FIFOQueue.pop(&currentAgent->FIFOQueue));
 			assert(returnHandle == RF_HANDLED || returnHandle == RF_UNHANDLED);
+
 			/**
 			 * removing garbage has to be an atomic action
 			 */
@@ -62,7 +63,7 @@ void runScheduler(void)
 			RF_exitCriticalSection();
 		}
 	}
-	}
+	//}
 }
 
 bool areThereAnyEventsToBeConsumedForAgent(struct RFBaseAgent* currentAgent)

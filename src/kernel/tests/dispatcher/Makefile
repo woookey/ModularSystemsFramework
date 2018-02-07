@@ -1,3 +1,4 @@
+# TODO: Fix relative directory structure
 RF_DIR = ${HOME}/Development/ARMDev/src/kernel
 UNITY_DIR = ${HOME}/Development/ARMDev/src/testing/Unity
 TEST_UTIL_DIR = ${HOME}/Development/ARMDev/src/testing/testingUtilities
