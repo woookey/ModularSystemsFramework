@@ -4,7 +4,7 @@
 /**
  * Definition of a reference to a LED structures
  */
-typedef struct LEDStructure* LEDStructure_t;
+typedef struct LEDStructure LEDStructure_t;
 typedef LEDStructure_t *const LEDReference;
 
 /**
@@ -12,7 +12,7 @@ typedef LEDStructure_t *const LEDReference;
  */
 LEDReference CP_HD_CPUActivityLED;
 LEDReference CP_HD_powerOnIndicationLED;
-LEDReference CP_HD_eecutingIndicationLED;
+LEDReference CP_HD_executingIndicationLED;
 LEDReference CP_HD_safetyStopIndicationLED;
 
 /**

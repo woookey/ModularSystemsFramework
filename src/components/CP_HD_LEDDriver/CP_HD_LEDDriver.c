@@ -62,7 +62,7 @@ void CP_HD_LED_switchLEDOff(LEDReference ledRef)
 {
 	if (ledRef->isOn)
 	{
-		CP_HA_LEDSwitchON(ledRef->led);
+		CP_HA_LEDSwitchOn(ledRef->led);
 		ledRef->isOn = true;
 	}
 }
