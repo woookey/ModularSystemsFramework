@@ -1,21 +1,22 @@
 #include <CP_HA_LED.h>
 #include <LEDType.h>
-#include <stdlib.h>
+#include <stdio.h>
 
 #define CPU_ACTIVITY_LED_PORT 1
 #define POWER_ON_INDICATION_LED_PORT 2
 #define EXECUTING_INDICATION_LED_PORT 3
 #define SAFETY_STOP_INDICATION_LED_PORT 4
 
-struct LEDType CPUActivityLEDInstance = { CPU_ACTIVITY_LED_PORT };
-struct LEDType powerOnIndicationLEDInstance = { POWER_ON_INDICATION_LED_PORT };
-struct LEDType executingIndicationLEDInstance = { EXECUTING_INDICATION_LED_PORT };
-struct LEDType safetyStopIndicationLEDInstance = { SAFETY_STOP_INDICATION_LED_PORT };
+struct LEDType CPUActivityLEDInstance = { .pin = CPU_ACTIVITY_LED_PORT };
+struct LEDType powerOnIndicationLEDInstance = { .pin = POWER_ON_INDICATION_LED_PORT };
+struct LEDType executingIndicationLEDInstance = { .pin = EXECUTING_INDICATION_LED_PORT };
+struct LEDType safetyStopIndicationLEDInstance = { .pin = SAFETY_STOP_INDICATION_LED_PORT };
 
-CPUActivityLED = &CPUActivityLEDInstance;
-powerOnIndicationLED = &powerOnIndicationLEDInstance;
-executingIndicationLED = &executingIndicationLEDInstance;
-safetyStopIndicationLED = &safetyStopIndicationLEDInstance;
+
+CP_HA_LEDStruct CPUActivityLED = &CPUActivityLEDInstance;
+CP_HA_LEDStruct powerOnIndicationLED = &powerOnIndicationLEDInstance;
+CP_HA_LEDStruct executingIndicationLED = &executingIndicationLEDInstance;
+CP_HA_LEDStruct safetyStopIndicationLED = &safetyStopIndicationLEDInstance;
 
 void CP_HA_LEDConstruct(CP_HA_LEDStruct LEDInstance)
 {

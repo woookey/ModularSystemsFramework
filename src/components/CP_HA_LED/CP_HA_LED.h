@@ -6,11 +6,11 @@
 typedef struct LEDType LEDType_t;
 typedef LEDType_t *const CP_HA_LEDStruct;
 
-CP_HA_LEDStruct CPUActivityLED;
+extern CP_HA_LEDStruct CPUActivityLED;
 
-CP_HA_LEDStruct powerOnIndicationLED;
-CP_HA_LEDStruct executingIndicationLED;
-CP_HA_LEDStruct safetyStopIndicationLED;
+extern CP_HA_LEDStruct powerOnIndicationLED;
+extern CP_HA_LEDStruct executingIndicationLED;
+extern CP_HA_LEDStruct safetyStopIndicationLED;
 
 void CP_HA_LEDConstruct(CP_HA_LEDStruct LEDInstance);
 void CP_HA_LEDSwitchOn(CP_HA_LEDStruct LEDInstance);
