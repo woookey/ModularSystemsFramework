@@ -39,6 +39,7 @@ RFHandle initialState(LEDManagerAgent* const me, RFEvent *const evt)
 {
 	(void)evt;
 	(void)me;
+	CP_HD_LED_switchLEDOn(CP_HD_powerOnIndicationLED);
 	INITIAL_TRANSITION((RFAgent*)me, &LEDOnState);
 }
 
@@ -48,7 +49,7 @@ RFHandle LEDOnState(LEDManagerAgent* const me, RFEvent *const evt)
 	{
 		case RF_INITIAL_SIGNAL:
 		{
-			CP_HD_LED_switchLEDOn();
+			CP_HD_LED_switchLEDOn(CP_HD_CPUActivityLED);
 			RFTimer_armTimer(&me->flashingPeriodTimer, LED_MANAGER_FLASHING_TIMEOUT_IN_MS);
 			return RF_HANDLED;
 		}
@@ -59,7 +60,7 @@ RFHandle LEDOnState(LEDManagerAgent* const me, RFEvent *const evt)
 		}
 		case RF_ENTRY_SIGNAL:
 		{
-			CP_HD_LED_switchLEDOn();
+			CP_HD_LED_switchLEDOn(CP_HD_CPUActivityLED);
 			RFTimer_armTimer(&me->flashingPeriodTimer, LED_MANAGER_FLASHING_TIMEOUT_IN_MS);
 			return RF_HANDLED;
 		}
@@ -78,7 +79,7 @@ RFHandle LEDOffState(LEDManagerAgent* const me, RFEvent *const evt)
 	{
 	case RF_ENTRY_SIGNAL:
 	{
-		CP_HD_LED_switchLEDOff();
+		CP_HD_LED_switchLEDOff(CP_HD_CPUActivityLED);
 		RFTimer_armTimer(&me->flashingPeriodTimer, LED_MANAGER_FLASHING_TIMEOUT_IN_MS);
 		return RF_HANDLED;
 	}
