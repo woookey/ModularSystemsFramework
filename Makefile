@@ -8,7 +8,6 @@ PORTING_DIR = ${CUR_DIR}/src/porting
 build_synthetic:
 	make clean
 	cd ${KERNEL_DIR}; make RF_kernel CC=gcc
-	cd ${PORTING_DIR}; make build_porting CC=gcc
 	cd ${COMPONENTS_DIR}; make build_components CC=gcc
 	cd ${TARGET_BUILD}; make build_synthetic
 	mkdir -p bld/synthetic/
@@ -17,7 +16,6 @@ build_synthetic:
 build_target:
 	make clean
 	cd ${KERNEL_DIR}; make RF_kernel CC=arm-none-eabi-gcc
-	cd ${PORTING_DIR}; make build_porting CC=arm-none-eabi-gcc
 	cd ${COMPONENTS_DIR}; make build_components CC=arm-none-eabi-gcc
 	cd ${TARGET_BUILD}; make build_target
 	mkdir -p bld/target
@@ -27,7 +25,6 @@ build_target:
 build_sample_target:
 	make clean
 	cd ${KERNEL_DIR}; make RF_kernel CC=arm-none-eabi-gcc
-	cd ${PORTING_DIR}; make build_porting CC=arm-none-eabi-gcc
 	cd ${COMPONENTS_DIR}; make build_components CC=arm-none-eabi-gcc
 	cd ${TARGET_BUILD}; make sample
 	mkdir -p bld/target
@@ -51,4 +48,3 @@ clean:
 	cd ${KERNEL_DIR}; make clean
 	cd ${TARGET_BUILD}; make clean
 	cd ${COMPONENTS_DIR}; make clean
-	cd ${PORTING_DIR}; make clean

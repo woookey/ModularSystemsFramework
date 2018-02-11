@@ -1,8 +1,10 @@
 #include <RF_timers.h>
 #include <RF_definitions.h>
+#include <RF_porting.h>
 #include <assert.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdint.h>
 
 static struct
 {
@@ -18,7 +20,7 @@ void RFTimerConstructor(RFAgent* agentSubscribed, RF_Timer* timer, uint32_t sign
 	assert(agentSubscribed != NULL);
 	assert(timer != NULL);
 	assert(signal >= 0); // TODO: might need an upper band
-	memset(timer, 0, sizeof(RF_Timer));
+	memset(timer, (uint64_t)0, sizeof(RF_Timer));
 
 	timer->agent = agentSubscribed;
 
@@ -84,6 +86,6 @@ bool add_timer(RF_Timer* timerPtr)
 
 void RFTimer_clearAllTimers(void)
 {
-	memset(&RFRegisteredTimers.registeredTimers, NULL, sizeof(RF_Timer*)*RF_MAX_NUMBER_OF_TIMERS);
+	memset(&RFRegisteredTimers.registeredTimers, (uint64_t)NULL, sizeof(RF_Timer*)*RF_MAX_NUMBER_OF_TIMERS);
 	RFRegisteredTimers.noOfRegisteredTimers = 0;
 }
