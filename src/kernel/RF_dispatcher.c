@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdint.h>
 
 #define NUMBER_OF_SIGNALS_REQUIRED_BY_FRAMEWORK RF_LAST_SIGNAL
 
@@ -19,7 +20,7 @@ static RF_Dispatcher dispatcherInstance;
 
 void RF_DispatcherCtor(void)
 {
-	memset(subscribersInstance, NULL,
+	memset(subscribersInstance, (uint64_t)NULL,
 			sizeof(RFAgent*)*RF_MAX_NUMBER_OF_SIGNALS*RF_MAX_NUMBER_OF_AGENTS);
 	memset(&dispatcherInstance, 0, sizeof(RF_Dispatcher));
 	dispatcherInstance.noOfRegisteredAgents = 0;
