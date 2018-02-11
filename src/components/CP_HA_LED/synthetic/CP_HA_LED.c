@@ -2,15 +2,15 @@
 #include <LEDType.h>
 #include <stdio.h>
 
-#define CPU_ACTIVITY_LED_PORT 1
-#define POWER_ON_INDICATION_LED_PORT 2
-#define EXECUTING_INDICATION_LED_PORT 3
-#define SAFETY_STOP_INDICATION_LED_PORT 4
+#define CPU_ACTIVITY_LED_PORT 150
+#define POWER_ON_INDICATION_LED_PORT 151
+#define EXECUTING_INDICATION_LED_PORT 156
+#define SAFETY_STOP_INDICATION_LED_PORT 157
 
-struct LEDType CPUActivityLEDInstance = { .pin = CPU_ACTIVITY_LED_PORT };
-struct LEDType powerOnIndicationLEDInstance = { .pin = POWER_ON_INDICATION_LED_PORT };
-struct LEDType executingIndicationLEDInstance = { .pin = EXECUTING_INDICATION_LED_PORT };
-struct LEDType safetyStopIndicationLEDInstance = { .pin = SAFETY_STOP_INDICATION_LED_PORT };
+static struct LEDType CPUActivityLEDInstance = { .pin = (uint8_t)CPU_ACTIVITY_LED_PORT };
+static struct LEDType powerOnIndicationLEDInstance = { .pin = (uint8_t)POWER_ON_INDICATION_LED_PORT };
+static struct LEDType executingIndicationLEDInstance = { .pin = (uint8_t)EXECUTING_INDICATION_LED_PORT };
+static struct LEDType safetyStopIndicationLEDInstance = { .pin = (uint8_t)SAFETY_STOP_INDICATION_LED_PORT };
 
 
 CP_HA_LEDStruct CPUActivityLED = &CPUActivityLEDInstance;

@@ -1,8 +1,8 @@
 CUR_DIR = $(shell pwd)
 
 OBJS = CP_HD_LEDDriver.c
-
 CFLAGS = -Wall -g -I. -c
+CPU_CONFIG = --specs=nosys.specs -mthumb -mcpu=cortex-m4
 
 INC_DIR = -I${CUR_DIR}/../CP_HA_LED/
 
@@ -12,6 +12,7 @@ ifeq (${CC}, arm-none-eabi-gcc)
 	INC_DIR += -I${CUR_DIR}/../../lib/CMSIS/Include
 	INC_DIR += -I${CUR_DIR}/../../lib/STM32F4xx_HAL_Driver/Inc
 	CFLAGS += -DSTM32F407xx
+	CFLAGS += ${CPU_CONFIG}
 else
 	INC_DIR += -I${CUR_DIR}/../CP_HA_LED/synthetic/
 endif

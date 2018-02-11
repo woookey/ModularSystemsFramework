@@ -15,10 +15,10 @@ struct LEDType CPUActivityLEDInstance =
 
 struct LEDType powerOnIndicationLEDInstance =
 {
-		.GPIOTypeDef_t = {GPIOC},
+		.GPIOTypeDef_t = {GPIOD},
 		.GPIOInitTypeDef_t =
 		{
-				.Pin = GPIO_PIN_0,
+				.Pin = GPIO_PIN_13,
 				.Mode = GPIO_MODE_OUTPUT_PP,
 				.Pull = GPIO_PULLUP,
 				.Speed = GPIO_SPEED_FREQ_VERY_HIGH,
@@ -56,18 +56,23 @@ CP_HA_LEDStruct safetyStopIndicationLED = &safetyStopIndicationLEDInstance;
 
 void CP_HA_LEDConstruct(CP_HA_LEDStruct LEDInstance)
 {
-	HAL_GPIO_Init(&LEDInstance->GPIOTypeDef_t, &LEDInstance->GPIOInitTypeDef_t);
+
+	GPIOD->MODER |= (1 << (12 << 1));
+	GPIOD->OSPEEDR |= (3 << (12 << 1));
+	/*HAL_GPIO_Init(&LEDInstance->GPIOTypeDef_t, &LEDInstance->GPIOInitTypeDef_t);*/
 }
 
 void CP_HA_LEDSwitchOn(CP_HA_LEDStruct LEDInstance)
 {
-	HAL_GPIO_WritePin(&LEDInstance->GPIOTypeDef_t,
-			LEDInstance->GPIOInitTypeDef_t.Pin, GPIO_PIN_SET);
+	GPIOD->BSRR |= (1 << 12);
+	/*HAL_GPIO_WritePin(&LEDInstance->GPIOTypeDef_t,
+			LEDInstance->GPIOInitTypeDef_t.Pin, GPIO_PIN_SET);*/
 }
 
 void CP_HA_LEDSwitchOff(CP_HA_LEDStruct LEDInstance)
 {
-	HAL_GPIO_WritePin(&LEDInstance->GPIOTypeDef_t,
-				LEDInstance->GPIOInitTypeDef_t.Pin, GPIO_PIN_RESET);
+	GPIOD->BSRR |= (1 << (12+(uint16_t)16));
+	/*HAL_GPIO_WritePin(&LEDInstance->GPIOTypeDef_t,
+				LEDInstance->GPIOInitTypeDef_t.Pin, GPIO_PIN_RESET);*/
 }
 

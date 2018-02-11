@@ -3,6 +3,7 @@
 #include <RF_events.h>
 #include <RF_scheduler.h>
 #include <RF_dispatcher.h>
+#include <RF_timers.h>
 #include <systemSignals.h>
 
 #include <stdint.h>
@@ -13,6 +14,7 @@
 #include <assert.h>
 
 
+/*
 #define LED_ORANGE 13
 #define LED_ORANGE_OFF 29
 
@@ -24,12 +26,13 @@
 
 #define LED_BLUE 15
 #define LED_BLUE_OFF 31
+*/
 
-static void wait(uint32_t ticks)
+/*static void wait(uint32_t ticks)
 {
 	volatile uint32_t time = ticks;
 	while(time--) {}
-}
+}*/
 static void setupHardware(void);
 static void initClocks(void);
 
@@ -38,8 +41,8 @@ int main()
 	SystemInit();
 	SystemCoreClockUpdate();
 	setupHardware();
-
-	while(1)
+	//GPIOD->BSRR |= (1<<12);
+	/*while(1)
 	{
 		GPIOD->BSRR |= (1 << LED_ORANGE);
 		wait(1000000);
@@ -57,16 +60,31 @@ int main()
 		wait(1000000);
 		GPIOD->BSRR |= (1 << LED_BLUE_OFF);
 		wait(1000000);
-	}
+	}*/
+	/*while(1)
+	{
+		HAL_GPIO_WritePin(&CPUActivityLEDInstance2.GPIOTypeDef_t,
+				CPUActivityLEDInstance2.GPIOInitTypeDef_t.Pin, GPIO_PIN_SET);
+		wait(1000000);
+		HAL_GPIO_WritePin(&CPUActivityLEDInstance2.GPIOTypeDef_t,
+						CPUActivityLEDInstance2.GPIOInitTypeDef_t.Pin, GPIO_PIN_RESET);
+	}*/
+
+
 	RFEvent LEDManagerPool[10];
 	RF_DispatcherCtor();
+
+
 	startAgent(LEDManager, &LEDManagerConstructor, AGENT_PRIORITY_0,
 						&LEDManagerPool[0], sizeof(RFEvent)*10);
 
 	RF_Dispatcher_RegisterNumberOfAgents(1);
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
-	runScheduler();
+	while(1)
+	{
 
+		runScheduler();
+	}
 	return 0;
 }
 
@@ -77,8 +95,9 @@ void setupHardware(void)
 	//SystemCoreClockUpdate();
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;
 	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
+	//HAL_GPIO_Init(&CPUActivityLEDInstance2.GPIOTypeDef_t, &CPUActivityLEDInstance2.GPIOInitTypeDef_t);
 
-	GPIOD->MODER |= (1 << (LED_ORANGE << 1));
+	/*GPIOD->MODER |= (1 << (LED_ORANGE << 1));
 	GPIOD->OSPEEDR |= (3 << (LED_ORANGE << 1));
 
 	GPIOD->MODER |= (1 << (LED_GREEN << 1));
@@ -88,7 +107,7 @@ void setupHardware(void)
 	GPIOD->OSPEEDR |= (3 << (LED_RED << 1));
 
 	GPIOD->MODER |= (1 << (LED_BLUE << 1));
-	GPIOD->OSPEEDR |= (3 << (LED_BLUE << 1));
+	GPIOD->OSPEEDR |= (3 << (LED_BLUE << 1));*/
 }
 
 static void initClocks()
@@ -137,4 +156,5 @@ static void initClocks()
 void SysTick_Handler(void)
 {
 	HAL_IncTick();
+	RFTimer_decreaseTimersByOneTick();
 }

@@ -7,7 +7,7 @@
  */
 struct LEDStructure
 {
-	CP_HA_LEDStruct led;
+	CP_HA_LEDStruct *const led;
 	bool isInitialised;
 	bool isOn;
 };
