@@ -7,7 +7,7 @@
  */
 struct LEDStructure
 {
-	CP_HA_LEDStruct *const led;
+	CP_HA_LEDStruct* led;
 	bool isInitialised;
 	bool isOn;
 };
@@ -53,7 +53,7 @@ void CP_HD_LED_initialiseLED(LEDReference ledRef)
 {
 	if (!ledRef->isInitialised)
 	{
-		CP_HA_LEDConstruct(ledRef->led);
+		CP_HA_LEDConstruct((CP_HA_LEDStruct)*ledRef->led);
 	}
 	ledRef->isInitialised = true;
 }
@@ -62,7 +62,7 @@ void CP_HD_LED_switchLEDOff(LEDReference ledRef)
 {
 	if (ledRef->isOn)
 	{
-		CP_HA_LEDSwitchOff(ledRef->led);
+		CP_HA_LEDSwitchOff((CP_HA_LEDStruct)*ledRef->led);
 		ledRef->isOn = false;
 	}
 }
@@ -71,7 +71,7 @@ void CP_HD_LED_switchLEDOn(LEDReference ledRef)
 {
 	if (!ledRef->isOn)
 	{
-		CP_HA_LEDSwitchOn(ledRef->led);
+		CP_HA_LEDSwitchOn((CP_HA_LEDStruct)*ledRef->led);
 		ledRef->isOn = true;
 	}
 }

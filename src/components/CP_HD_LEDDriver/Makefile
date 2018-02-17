@@ -20,5 +20,9 @@ endif
 CP_HD_LEDDriver.o: CP_HD_LEDDriver.c
 	${CC} ${CFLAGS} ${INC_DIR} ${OBJS} -o CP_HD_LEDDriver.o
 	
+test:
+	cd tests; make test
+	
 clean:
 	rm -rf *.o *.~
+	cd tests; make clean
