@@ -6,7 +6,7 @@
 
 struct LEDType
 {
-	GPIO_TypeDef GPIOTypeDef_t;
+	GPIO_TypeDef* GPIOTypeDef_t;
 	GPIO_InitTypeDef GPIOInitTypeDef_t;
 };
 
