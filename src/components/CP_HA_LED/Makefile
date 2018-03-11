@@ -25,3 +25,4 @@ ${HAL_DRIVER_SRC}/stm32f4xx_hal_gpio.o:
 	${CC} ${CFLAGS} ${INC_DIR} ${HAL_DRIVER_SRC}/stm32f4xx_hal_gpio.c -o stm32f4xx_hal_gpio.o
 clean:
 	rm -rf *.o *.~ 
+	cd mock; rm -rf *.o *.~
