@@ -4,6 +4,9 @@ KERNEL_DIR = ${CUR_DIR}/src/kernel
 TARGET_BUILD = ${CUR_DIR}/src/target/discoveryf4
 COMPONENTS_DIR = ${CUR_DIR}/src/components
 PORTING_DIR = ${CUR_DIR}/src/porting
+TESTING_DIR = ${CUR_DIR}/src/testing
+
+CPU_CONFIG = --specs=nosys.specs -mthumb -mcpu=cortex-m4
 
 build_synthetic:
 	make clean
@@ -34,6 +37,10 @@ build_synthetic_kernel:
 	make clean
 	cd ${KERNEL_DIR}; make RF_kernel CC=gcc
 	
+test:
+	make test_kernel;
+	make test_components;
+	
 test_kernel:
 	make clean
 	cd ${KERNEL_DIR}; make test
@@ -48,3 +55,4 @@ clean:
 	cd ${KERNEL_DIR}; make clean
 	cd ${TARGET_BUILD}; make clean
 	cd ${COMPONENTS_DIR}; make clean
+	cd ${TESTING_DIR}; make clean

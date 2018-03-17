@@ -1,6 +1,11 @@
 RF_OBJS = RF_porting.o RF_agents.o RF_scheduler.o RF_events.o RF_queue.o RF_dispatcher.o RF_timers.o 
 CFLAGS = -Wall -g -I. -c
 LFLAGS = -Wall -I.
+CPU_CONFIG = --specs=nosys.specs -mthumb -mcpu=cortex-m4
+
+ifeq (${CC}, arm-none-eabi-gcc)
+	CFLAGS += ${CPU_CONFIG}
+endif
 
 RF_kernel: ${RF_OBJS}
 

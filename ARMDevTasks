@@ -1,0 +1,11 @@
+Next tasks:
+1) Merge building synthetically and for target to one file
+ - This requires creating a module initiating all hardware
+2) Create power manager that will track the battery-related features of the system
+3) Create the motor driver that will simply change the PWM signal (for now)
+4) Create an interface to either ROS or BeaglebleBone to send commands
+ - It should be ROS compatible interface
+
+
+As more things are getting implements it will be needed to create a testing manager to capture events and make sure the required events are published
+

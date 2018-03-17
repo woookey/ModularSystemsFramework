@@ -1,4 +1,6 @@
 #include <LEDManager.h>
+#include <CP_HD_LEDDriver_mock.h>
+#include <CP_HD_LEDDriver.h>
 #include <RF_scheduler.h>
 #include <RF_dispatcher.h>
 #include <systemSignals.h>
@@ -6,34 +8,22 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+#include <testing_utils.h>
 
-typedef struct
+struct LEDStructure LEDStructureInstance_CPUActivityLED =
 {
-	bool isOn;
-	uint32_t timesSwitchedOn;
-	uint32_t timesSwitchedOff;
-} LED;
-LED LEDInstance = {false, 0, 0};
-
-static void resetVariables(void)
+		.isInitialised = false,
+		.isOn = false,
+		.noOfCalls = 0,
+};
+LEDReference CP_HD_CPUActivityLED = &LEDStructureInstance_CPUActivityLED;
+struct LEDStructure LEDStructureInstance_powerOnIndicationLED =
 {
-	memset(&LEDInstance, 0, sizeof(LED));
-	LEDInstance.isOn = false;
-	LEDInstance.timesSwitchedOff = 0;
-	LEDInstance.timesSwitchedOn = 0;
-}
-
-void CP_HD_LED_switchLEDOff()
-{
-	LEDInstance.isOn = false;
-	LEDInstance.timesSwitchedOff++;
-}
-
-void CP_HD_LED_switchLEDOn()
-{
-	LEDInstance.isOn = true;
-	LEDInstance.timesSwitchedOn++;
-}
+		.isInitialised = false,
+		.isOn = false,
+		.noOfCalls = 0,
+};
+LEDReference CP_HD_powerOnIndicationLED = &LEDStructureInstance_powerOnIndicationLED;
 
 void accelerateTimeByNTicks(uint32_t nTicks)
 {
@@ -45,18 +35,17 @@ void accelerateTimeByNTicks(uint32_t nTicks)
 	}
 }
 
-static void createLEDManagerSucceeds(void);
+static void createLEDManagerSucceedsAndRunsFine(void);
 
 int main()
 {
 	UNITY_BEGIN();
-	RUN_TEST(createLEDManagerSucceeds);
+	RUN_TEST(createLEDManagerSucceedsAndRunsFine);
 	UNITY_END();
 }
 
-void createLEDManagerSucceeds(void)
+void createLEDManagerSucceedsAndRunsFine(void)
 {
-	resetVariables();
 	RFEvent LEDManagerPool[10];
 	RF_DispatcherCtor();
 	startAgent(LEDManager, &LEDManagerConstructor, AGENT_PRIORITY_0,
@@ -66,14 +55,25 @@ void createLEDManagerSucceeds(void)
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
 	TEST_ASSERT(LEDManager->currentHandler != NULL);
 	runScheduler();
-	TEST_ASSERT(LEDInstance.isOn);
-	TEST_ASSERT(LEDInstance.timesSwitchedOn == (uint32_t)1);
-	accelerateTimeByNTicks(500);
-	TEST_ASSERT(!LEDInstance.isOn)
-	TEST_ASSERT(LEDInstance.timesSwitchedOn == (uint32_t)1);
-	TEST_ASSERT(LEDInstance.timesSwitchedOff == (uint32_t)1);
-	accelerateTimeByNTicks(500);
-	TEST_ASSERT(LEDInstance.isOn);
-	TEST_ASSERT(LEDInstance.timesSwitchedOn == (uint32_t)2);
-	TEST_ASSERT(LEDInstance.timesSwitchedOff == (uint32_t)1);
+	TEST_ASSERT(isLEDInitialised(&LEDStructureInstance_CPUActivityLED));
+	TEST_ASSERT(isLEDSwitchedOn(&LEDStructureInstance_CPUActivityLED));
+	TEST_ASSERT(isLEDInitialised(&LEDStructureInstance_powerOnIndicationLED));
+	TEST_ASSERT(isLEDSwitchedOn(&LEDStructureInstance_powerOnIndicationLED));
+	TEST_ASSERT(wasLEDCalledNTimes(&LEDStructureInstance_powerOnIndicationLED, 1));
+	TEST_ASSERT(wasLEDCalledNTimes(&LEDStructureInstance_CPUActivityLED, 1));
+
+	uint8_t randomNumberOfPeriods;
+	accelerateTimeByNTicks((uint32_t)500*(uint32_t)randomNumberOfPeriods);
+
+	uint32_t expectedNumberOfCalls = (uint32_t)randomNumberOfPeriods+(uint32_t)1;
+	TEST_ASSERT(isLEDSwitchedOn(&LEDStructureInstance_powerOnIndicationLED));
+	TEST_ASSERT(wasLEDCalledNTimes(&LEDStructureInstance_powerOnIndicationLED, 1));
+	if (randomNumberOfPeriods % 2 == 0)
+	{
+		TEST_ASSERT(isLEDSwitchedOn(&LEDStructureInstance_CPUActivityLED));
+	}
+	else
+	{
+		TEST_ASSERT(!isLEDSwitchedOn(&LEDStructureInstance_CPUActivityLED));
+	}
 }
