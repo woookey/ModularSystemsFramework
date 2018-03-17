@@ -8,19 +8,22 @@
 #include <systemSignals.h>
 #include <time.h>
 #include <stdbool.h>
+#include <CP_HA_HardwareSetup.h>
 
 #define MS_PER_SEC 1000
 
 int main()
 {
+	setupHardware();
 	RFEvent LEDManagerPool[10];
 	RF_DispatcherCtor();
+
+
 	startAgent(LEDManager, &LEDManagerConstructor, AGENT_PRIORITY_0,
-				&LEDManagerPool[0], sizeof(RFEvent)*10);
+							&LEDManagerPool[0], sizeof(RFEvent)*10);
 
 	RF_Dispatcher_RegisterNumberOfAgents(1);
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
-	printf("System started\n");
 
 	// Initiate synthetic timing
 	clock_t t;
@@ -37,8 +40,5 @@ int main()
 		}
 		runScheduler();
 	}
-
-
-	printf("System finished");
 	return 0;
 }

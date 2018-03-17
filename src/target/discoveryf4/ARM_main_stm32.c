@@ -5,9 +5,7 @@
 #include <RF_dispatcher.h>
 #include <RF_timers.h>
 #include <systemSignals.h>
-
-#include <stdint.h>
-#include <assert.h>
+#include <stdbool.h>
 
 int main()
 {
@@ -21,7 +19,7 @@ int main()
 
 	RF_Dispatcher_RegisterNumberOfAgents(1);
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
-	while(1)
+	while(true)
 	{
 		runScheduler();
 	}
