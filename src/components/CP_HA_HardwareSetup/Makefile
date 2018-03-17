@@ -29,7 +29,7 @@ else
 endif
 
 CP_HA_HardwareSetup.o: ${OBJS} 
-	${CC} ${CFLAGS} ${DEPENDENCIES} ${INC_DIR} ${OBJS} #-o CP_HA_HardwareSetup.o
+	${CC} ${CFLAGS} ${DEPENDENCIES} ${INC_DIR} ${OBJS}
 	
 clean:
 	rm -rf *.o *.~ 
