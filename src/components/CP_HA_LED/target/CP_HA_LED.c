@@ -18,7 +18,7 @@ struct LEDType powerOnIndicationLEDInstance =
 		.GPIOTypeDef_t = {GPIOC},
 		.GPIOInitTypeDef_t =
 		{
-				.Pin = 0,
+				.Pin = 15,
 				.Mode = GPIO_MODE_OUTPUT_PP,
 				.Pull = GPIO_PULLUP,
 				.Speed = GPIO_SPEED_FREQ_VERY_HIGH,
