@@ -21,6 +21,7 @@ INCLUDE_DIRS = -I./
 INCLUDE_DIRS += -I../../components/LEDManager/
 INCLUDE_DIRS += -I../../components/CP_HD_LEDDriver/
 INCLUDE_DIRS += -I../../components/CP_HA_LED/
+INCLUDE_DIRS += -I../../components/CP_HA_HardwareSetup/
 INCLUDE_DIRS += -I../../system/
 INCLUDE_DIRS += -I../../kernel/
 
@@ -32,6 +33,7 @@ HAL_SRC += ${STM32_HAL_DRIVER_SRC_PATH}/stm32f4xx_hal_cortex.c
 DEPENDENCIES += ../../components/LEDManager/LEDManager.o
 DEPENDENCIES += ../../components/CP_HD_LEDDriver/CP_HD_LEDDriver.o
 DEPENDENCIES += ../../components/CP_HA_LED/CP_HA_LED.o
+DEPENDENCIES += ../../components/CP_HA_HardwareSetup/CP_HA_HardwareSetup.o
 
 KERNEL_OBJS = ${RF_KERNEL_DIR}/RF_porting.o
 KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_queue.o
