@@ -47,22 +47,13 @@ KERNEL_OBJS += ${RF_KERNEL_DIR}/RF_timers.o
 build_target: ${DEPENDENCIES} ${KERNEL_OBJS} 
 	${CC_TARGET} ${CC_CONFIG} ${CPU_CONFIG} -Os \
 	${CFLAGS} ${INCLUDE_DIRS} ${LFLAGS} ${CMSIS_STARTUP_INC_PATH}/startup_stm32f407xx.s \
-	${DEPENDENCIES} ${KERNEL_OBJS} ARM_main_stm32.c ${CMSIS_SYSTEM_CONFIG_INC_PATH}/system_stm32f4xx.c \
-	${HAL_SRC} ${DEFS} -o ARM_main_stm32.axf;
-	arm-none-eabi-objcopy -O binary ARM_main_stm32.axf ARM_main_stm32.bin
+	${DEPENDENCIES} ${KERNEL_OBJS} ARM_main.c ${CMSIS_SYSTEM_CONFIG_INC_PATH}/system_stm32f4xx.c \
+	${HAL_SRC} ${DEFS} -o ARM_main.axf;
+	arm-none-eabi-objcopy -O binary ARM_main.axf ARM_main.bin
 	
 build_synthetic: ${DEPENDENCIES} ${KERNEL_OBJS} 
 	${CC_SYNTHETIC} -g -Wall ${CFLAGS} ${INCLUDE_DIRS} \
-	${DEPENDENCIES} ${KERNEL_OBJS} ARM_main_synth.c -o ARM_main_synth
-	
-sample: sample_1 system startup ${DEPENDENCIES} ${KERNEL_OBJS}
-	arm-none-eabi-gcc ${CPU_CONFIG} -T ../../lib/STM32F407_Linker/STM32F407VGTx_FLASH.ld -L../../lib/STM32F407_Linker/STM32F407VGTx_FLASH.ld \
-	system.o startup.o sample_target.o ${DEPENDENCIES} ${KERNEL_OBJS} \
-	-o sample.axf;
-	arm-none-eabi-objcopy -O binary sample.axf sample.bin
-	
-sample_1:
-	${CC_TARGET} ${CC_CONFIG} ${CPU_CONFIG} ${INCLUDE_DIRS} -I../../lib/CMSIS/Include/ -I ../../lib/CMSIS/Device/ST/STM32F4xx/Include/ ${DEFS} -Os -c sample_target.c -o sample_target.o
+	${DEPENDENCIES} ${KERNEL_OBJS} ARM_main.c -o ARM_main	
 	
 system:
 	${CC_TARGET} ${CC_CONFIG} ${CPU_CONFIG} -I../../lib/CMSIS/Include/ -I ../../lib/CMSIS/Device/ST/STM32F4xx/Include/ ${DEFS} -Os -c ../../lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c -o system.o
