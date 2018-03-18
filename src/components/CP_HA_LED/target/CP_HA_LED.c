@@ -3,7 +3,7 @@
 
 struct LEDType CPUActivityLEDInstance =
 {
-		.GPIOTypeDef_t = {GPIOD},
+		.GPIOTypeDef_t = GPIOD,
 		.GPIOInitTypeDef_t =
 		{
 				.Pin = 12,
@@ -15,7 +15,7 @@ struct LEDType CPUActivityLEDInstance =
 
 struct LEDType powerOnIndicationLEDInstance =
 {
-		.GPIOTypeDef_t = {GPIOC},
+		.GPIOTypeDef_t = GPIOC,
 		.GPIOInitTypeDef_t =
 		{
 				.Pin = 15,
@@ -27,7 +27,7 @@ struct LEDType powerOnIndicationLEDInstance =
 
 struct LEDType executingIndicationLEDInstance =
 {
-		.GPIOTypeDef_t = {GPIOC},
+		.GPIOTypeDef_t = GPIOC,
 		.GPIOInitTypeDef_t =
 		{
 				.Pin = GPIO_PIN_1,
@@ -39,7 +39,7 @@ struct LEDType executingIndicationLEDInstance =
 
 struct LEDType safetyStopIndicationLEDInstance =
 {
-		.GPIOTypeDef_t = {GPIOC},
+		.GPIOTypeDef_t = GPIOC,
 		.GPIOInitTypeDef_t =
 		{
 				.Pin = GPIO_PIN_2,

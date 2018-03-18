@@ -6,6 +6,7 @@
 struct LEDType
 {
 	uint8_t pin;
+	char port;
 };
 
 #endif
