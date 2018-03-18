@@ -19,9 +19,10 @@ int main()
 
 	RF_Dispatcher_RegisterNumberOfAgents(1);
 	RF_Dispatcher_RegisterNumberOfEvents(SYSTEM_SIGNAL_NUMBER_OF_SIGNALS);
-	while(true)
-	{
-		runScheduler();
-	}
+	while(true){}
+	/**
+	 * TODO: Investigate if there should be a lock for starting the framework
+	 * before all agents are initialised - just before while loop
+	 */
 	return 0;
 }
