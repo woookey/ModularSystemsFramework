@@ -5,7 +5,9 @@
 #include <stm32f4xx_hal_rcc_ex.h>
 #include <stm32f4xx_hal.h>
 #include <RF_timers.h>
+#include <RF_scheduler.h>
 #include <assert.h>
+#include <stdbool.h>
 
 static void initClocks(void)
 {
@@ -56,6 +58,10 @@ void setupHardware(void)
 	initClocks();
 	initPorts();
 }
+void startHardware(void)
+{
+	while(true) {}
+}
 
 /**
  * Interrupt Handlers
@@ -64,4 +70,5 @@ void SysTick_Handler(void)
 {
 	HAL_IncTick();
 	RFTimer_decreaseTimersByOneTick();
+	runScheduler();
 }
