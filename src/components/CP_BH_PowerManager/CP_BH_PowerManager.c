@@ -31,6 +31,7 @@ RFHandle initialState(PowerManagerAgent* const self, RFEvent *const evt)
 	(void)evt;
 
 	CP_HD_LED_initialiseLED(CP_HD_powerOnIndicationLED);
+	CP_HD_LED_initialiseLED(CP_HD_safetyStopIndicationLED);
 	INITIAL_TRANSITION((RFAgent*) self, &powerOnState);
 }
 
@@ -40,6 +41,7 @@ RFHandle powerOnState(PowerManagerAgent* const self, RFEvent *const evt)
 	{
 	case RF_INITIAL_SIGNAL:
 	{
+		CP_HD_LED_switchLEDOn(CP_HD_safetyStopIndicationLED);
 		CP_HD_LED_switchLEDOn(CP_HD_powerOnIndicationLED);
 		return RF_HANDLED;
 	}
