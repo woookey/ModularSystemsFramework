@@ -5,6 +5,10 @@ build_components:
 	make build_components_CP_HD_LEDDriver
 	make build_components_LEDManager
 	make build_components_CP_HA_HardwareSetup
+	make build_components_CP_BH_PowerManager
+	
+build_components_CP_BH_PowerManager:
+	cd ${CUR_DIR}/CP_BH_PowerManager; make CP_BH_PowerManager.o CC=${CC}
 	
 build_components_CP_HA_HardwareSetup:
 	cd ${CUR_DIR}/CP_HA_HardwareSetup; make CP_HA_HardwareSetup.o CC=${CC}
@@ -33,3 +37,4 @@ clean:
 	cd ${CUR_DIR}/CP_HD_LEDDriver; make clean
 	cd ${CUR_DIR}/CP_HA_LED; make clean
 	cd ${CUR_DIR}/CP_HA_HardwareSetup; make clean
+	cd ${CUR_DIR}/CP_BH_PowerManager; make clean
