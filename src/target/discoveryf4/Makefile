@@ -64,6 +64,6 @@ startup:
 	${CC_TARGET} ${CC_CONFIG} ${CPU_CONFIG} -I../../lib/CMSIS/Include/ -I ../../lib/CMSIS/Device/ST/STM32F4xx/Include/ ${DEFS} -Os -c ../../lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f407xx.s -o startup.o
 	
 clean:
-	rm -rf *~ *.axf *.bin ARM_main_synth *o
+	rm -rf *~ *.axf *.bin ARM_main_synth *o ARM_main
 	
 	
