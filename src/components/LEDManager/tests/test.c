@@ -57,17 +57,12 @@ void createLEDManagerSucceedsAndRunsFine(void)
 	runScheduler();
 	TEST_ASSERT(isLEDInitialised(&LEDStructureInstance_CPUActivityLED));
 	TEST_ASSERT(isLEDSwitchedOn(&LEDStructureInstance_CPUActivityLED));
-	TEST_ASSERT(isLEDInitialised(&LEDStructureInstance_powerOnIndicationLED));
-	TEST_ASSERT(isLEDSwitchedOn(&LEDStructureInstance_powerOnIndicationLED));
-	TEST_ASSERT(wasLEDCalledNTimes(&LEDStructureInstance_powerOnIndicationLED, 1));
 	TEST_ASSERT(wasLEDCalledNTimes(&LEDStructureInstance_CPUActivityLED, 1));
 
 	uint8_t randomNumberOfPeriods;
 	accelerateTimeByNTicks((uint32_t)500*(uint32_t)randomNumberOfPeriods);
 
 	uint32_t expectedNumberOfCalls = (uint32_t)randomNumberOfPeriods+(uint32_t)1;
-	TEST_ASSERT(isLEDSwitchedOn(&LEDStructureInstance_powerOnIndicationLED));
-	TEST_ASSERT(wasLEDCalledNTimes(&LEDStructureInstance_powerOnIndicationLED, 1));
 	if (randomNumberOfPeriods % 2 == 0)
 	{
 		TEST_ASSERT(isLEDSwitchedOn(&LEDStructureInstance_CPUActivityLED));
