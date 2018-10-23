@@ -3,7 +3,7 @@ CFLAGS = -Wall -g -c -I.
 
 CPU_CONFIG = --specs=nosys.specs -mthumb -mcpu=cortex-m4
 
-CMSIS_SYSTEM_CONFIG_INC_PATH = /home/wookie/Development/ARMDev/src/lib/CMSIS/Device/ST/STM32F4xx/Source/Templates
+CMSIS_SYSTEM_CONFIG_INC_PATH = ${CUR_DIR}/../../lib/CMSIS/Device/ST/STM32F4xx/Source/Templates
 STM32_HAL_DRIVER_SRC_PATH = ${CUR_DIR}/../../lib/STM32F4xx_HAL_Driver/Src
 
 

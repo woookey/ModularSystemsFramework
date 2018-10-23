@@ -4,16 +4,16 @@ CC_SYNTHETIC = gcc
 CC_CONFIG = -g -Wall
 CPU_CONFIG = --specs=nosys.specs -mthumb -mcpu=cortex-m4
 RF_KERNEL_DIR = ${CUR_DIR}/../../kernel
-CMSIS_CORE_INC_PATH = /home/wookie/Development/ARMDev/src/lib/CMSIS/Include/
-CMSIS_STM32F4XX_INC_PATH = /home/wookie/Development/ARMDev/src/lib/CMSIS/Device/ST/STM32F4xx/Include/
-CMSIS_STARTUP_INC_PATH = /home/wookie/Development/ARMDev/src/lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc
-CMSIS_SYSTEM_CONFIG_INC_PATH = /home/wookie/Development/ARMDev/src/lib/CMSIS/Device/ST/STM32F4xx/Source/Templates
-STM32_HAL_DRIVER_INC_PATH = ../../lib/STM32F4xx_HAL_Driver/Inc/
-STM32_HAL_DRIVER_SRC_PATH = ../../lib/STM32F4xx_HAL_Driver/Src
+CMSIS_CORE_INC_PATH = ${CUR_DIR}/../../lib/CMSIS/Include/
+CMSIS_STM32F4XX_INC_PATH = ${CUR_DIR}/../../lib/CMSIS/Device/ST/STM32F4xx/Include/
+CMSIS_STARTUP_INC_PATH = ${CUR_DIR}/../../lib/CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc
+CMSIS_SYSTEM_CONFIG_INC_PATH = ${CUR_DIR}/../../lib/CMSIS/Device/ST/STM32F4xx/Source/Templates
+STM32_HAL_DRIVER_INC_PATH = ${CUR_DIR}/../../lib/STM32F4xx_HAL_Driver/Inc/
+STM32_HAL_DRIVER_SRC_PATH = ${CUR_DIR}/../../lib/STM32F4xx_HAL_Driver/Src
 CFLAGS = -I ${CMSIS_CORE_INC_PATH} -I ${CMSIS_STM32F4XX_INC_PATH} -I${RF_KERNEL_DIR}
 CFLAGS += -I ${STM32_HAL_DRIVER_INC_PATH}
 LINKER_SCRIPT = STM32F407VGTx_FLASH.ld
-LINKER_PATH = /home/wookie/Development/ARMDev/src/lib/STM32F407_Linker/
+LINKER_PATH = ${CUR_DIR}/../../lib/STM32F407_Linker/
 LFLAGS = -T ${LINKER_SCRIPT} -L ${LINKER_PATH}
 DEFS = -DHSE_VALUE=8000000 -DSTM32F407xx
 

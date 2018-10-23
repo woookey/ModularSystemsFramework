@@ -1,6 +1,7 @@
-RF_DIR = ${HOME}/Development/ARMDev/src/kernel
-UNITY_DIR = ${HOME}/Development/ARMDev/src/testing/Unity
-TEST_UTIL_DIR = ${HOME}/Development/ARMDev/src/testing/testingUtilities
+CUR_DIR = $(shell pwd)
+RF_DIR = ${CUR_DIR}/../../
+UNITY_DIR = ${CUR_DIR}/../../../testing/Unity
+TEST_UTIL_DIR = ${CUR_DIR}/../../../testing/testingUtilities
 RF_OBJS = RF_timers.o RF_queue.o RF_agents.o RF_events.o
 OBJS = test.o unity.o testing_utils.o
 CC = gcc
