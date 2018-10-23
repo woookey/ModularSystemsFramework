@@ -39,10 +39,10 @@ RFHandle initialState(LEDManagerAgent* const me, RFEvent *const evt)
 {
 	(void)evt;
 	(void)me;
-	CP_HD_LED_initialiseLED(CP_HD_powerOnIndicationLED);
+	//CP_HD_LED_initialiseLED(CP_HD_powerOnIndicationLED);
 	CP_HD_LED_initialiseLED(CP_HD_CPUActivityLED);
 
-	CP_HD_LED_switchLEDOn(CP_HD_powerOnIndicationLED);
+	//CP_HD_LED_switchLEDOn(CP_HD_powerOnIndicationLED);
 	INITIAL_TRANSITION((RFAgent*)me, &LEDOnState);
 }
 

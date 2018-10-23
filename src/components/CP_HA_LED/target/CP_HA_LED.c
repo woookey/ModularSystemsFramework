@@ -42,7 +42,7 @@ struct LEDType safetyStopIndicationLEDInstance =
 		.GPIOTypeDef_t = GPIOC,
 		.GPIOInitTypeDef_t =
 		{
-				.Pin = GPIO_PIN_2,
+				.Pin = 2,
 				.Mode = GPIO_MODE_OUTPUT_PP,
 				.Pull = GPIO_PULLUP,
 				.Speed = GPIO_SPEED_FREQ_VERY_HIGH,

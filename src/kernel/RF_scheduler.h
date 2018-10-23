@@ -12,6 +12,8 @@
 
 /**
  * Priority has to be assigned during agents construction
+ * TODO: At the moment the priority does not matter - the order
+ * in which agents are created matters!
  */
 typedef enum
 {
