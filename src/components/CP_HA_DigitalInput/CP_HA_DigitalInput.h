@@ -1,7 +1,7 @@
 #ifndef CP_HA_DIGITAL_INPUT_H
 #define CP_HA_DIGITAL_INPUT_H
 
-#include <stdint.h>.h>
+#include <stdint.h>
 
 typedef struct DigitalInputType DigitalInputType_t;
 typedef DigitalInputType_t* const CP_HA_DigitalInput;
