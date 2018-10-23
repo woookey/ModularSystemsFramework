@@ -1,6 +1,9 @@
 # Modular Systems Framework
 Modular Systems Framework is a C project implementing the kernel for any event-driven, real-time project that is based on modules
 
+## Prerequisite ##
+* st-link software is installed
+* GNU Arm Embedded Toolchain (https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
 ## How to use ##
 Only synthetic build and STM32F407VG microcontroller are supported for now!
 
